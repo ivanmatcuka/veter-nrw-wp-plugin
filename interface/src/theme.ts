@@ -1,15 +1,15 @@
-import { createTheme } from "@mui/material/styles";
+import { createTheme } from '@mui/material/styles';
 
 const theme = createTheme({
   typography: {
-    fontFamily: ["var(--font-ubuntu)", "var(--font-ubuntu)"].join(","),
+    fontFamily: ['var(--font-ubuntu)'].join(','),
   },
   palette: {
     primary: {
-      main: "#490678",
+      main: '#490678',
     },
     grey: {
-      500: "#dfdfdf",
+      500: '#dfdfdf',
     },
   },
   components: {

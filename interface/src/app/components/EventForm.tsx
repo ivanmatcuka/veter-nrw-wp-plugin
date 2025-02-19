@@ -61,7 +61,7 @@ export const EventForm: FC<EventFormProps> = ({ daytime }) => {
     ].forEach((key) => {
       if (settings[key]) setFieldValue(key, settings[key]);
     });
-  }, [settings, setFieldValue]);
+  }, [settings, setFieldValue, daytime]);
 
   const daytimeSettings = useMemo(() => {
     return {
@@ -112,6 +112,8 @@ export const EventForm: FC<EventFormProps> = ({ daytime }) => {
             name={`${daytime}_text_header`}
             value={daytimeSettings.textHeader}
             onChange={handleChange}
+            multiline
+            rows={1}
             required
           />
           <TextField
@@ -120,6 +122,8 @@ export const EventForm: FC<EventFormProps> = ({ daytime }) => {
             name={`${daytime}_text_before`}
             value={daytimeSettings.textBefore}
             onChange={handleChange}
+            multiline
+            rows={1}
             required
           />
           <TextField
@@ -128,6 +132,8 @@ export const EventForm: FC<EventFormProps> = ({ daytime }) => {
             name={`${daytime}_text_block_header`}
             value={daytimeSettings.textBlockHeader}
             onChange={handleChange}
+            multiline
+            rows={1}
             required
           />
           <TextField
@@ -136,6 +142,8 @@ export const EventForm: FC<EventFormProps> = ({ daytime }) => {
             name={`${daytime}_text_after`}
             value={daytimeSettings.textAfter}
             onChange={handleChange}
+            multiline
+            rows={1}
             required
           />
         </Section>

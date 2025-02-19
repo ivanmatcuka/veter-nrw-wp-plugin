@@ -1,4 +1,3 @@
-import './App.css';
 import BasicTabs from './app/components/Tabs';
 
 function App() {

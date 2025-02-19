@@ -57,6 +57,8 @@ export const EventNews: FC<EventNewsProps> = ({
           />
           <TextField
             fullWidth
+            multiline
+            rows={1}
             label={t('newsUrlPlaceholder')}
             value={item.url}
             onChange={(e) => handleUpdateNewsItem(index, 'url', e.target.value)}
@@ -74,6 +76,8 @@ export const EventNews: FC<EventNewsProps> = ({
           />
           <TextField
             fullWidth
+            multiline
+            rows={1}
             label={t('additionalInstructionsPlaceholder')}
             value={item.extra}
             onChange={(e) =>

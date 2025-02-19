@@ -45,6 +45,8 @@ export const NewsForm = () => {
   const isGeneratorReady =
     values.selectedModel && prompt && settings?.news_header_prompt;
 
+  console.log('isGeneratorReady', prompt);
+
   useEffect(() => {
     if (settings?.news_prompt) setPrompt(settings.news_prompt);
     if (settings?.tones) {
@@ -69,9 +71,12 @@ export const NewsForm = () => {
 
         <Section title={t('articleUrl')} chip="{url}">
           <TextField
+            variant="outlined"
             fullWidth
             value={values.newsUrl}
             name="newsUrl"
+            multiline
+            rows={1}
             onChange={handleChange}
             required
           />

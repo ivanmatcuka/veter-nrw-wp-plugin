@@ -2,7 +2,7 @@ import Anthropic from '@anthropic-ai/sdk';
 import { TextBlock } from '@anthropic-ai/sdk/resources/index.mjs';
 import { ChatGPTAPI, ChatGPTError, ChatMessage } from 'chatgpt';
 
-const API_URL = import.meta.env.WORDPRESS_URL;
+const API_URL = import.meta.env.VITE_WORDPRESS_URL;
 
 export type SettingsResponse = {
   id: number;

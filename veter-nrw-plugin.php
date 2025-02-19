@@ -144,21 +144,45 @@ class VeterNRWPlugin
       'veter',
       [$this, 'renderAdminPage'],
     );
+
+    $this->addExtraMenuPage();
   }
 
   public function renderAdminPage()
   {
-    wp_enqueue_script(
-      'hello-react-script',
-      plugins_url('dist/static/js/main.2ca54bc3.js', __FILE__),
-    );
-
     $output = file_get_contents(__DIR__ . '/dist/index.html');
 
     echo $output;
     echo $this->twig->render('settings.twig', [
       'output' => $this->getOutput()
     ]);
+  }
+
+  public function addExtraMenuPage()
+  {
+    add_menu_page(
+      'Veter NRW',
+      'Veter NRW',
+      'manage_options',
+      'veter-nrw',
+      [$this, 'renderExtraSettingsPage'],
+      'dashicons-welcome-widgets-menus',
+      80
+    );
+  }
+
+  public function renderExtraSettingsPage()
+  {
+    wp_enqueue_script_module(
+      'veter-nrw-script',
+      plugins_url('interface/dist/assets/index.js', __FILE__),
+    );
+    wp_enqueue_style(
+      'veter-nrw-style',
+      plugins_url('interface/dist/assets/index.css', __FILE__),
+    );
+
+    echo $this->twig->render('index.twig');
   }
 
   public function renderRield($field, $key)
