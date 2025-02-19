@@ -1,0 +1,32 @@
+{
+  "settings": {
+    "title": "Настройки",
+    "toneOfVoice": "Тон голоса",
+    "apiKeys": "API ключи",
+    "apiChatGPT": "API ChatGPT",
+    "apiClaude": "API Claude",
+    "defaultModel": "Модель по умолчанию"
+  },
+  "newsForm": {
+    "articleText": "Текст статьи",
+    "articleTextPlaceholder": "Введите текст статьи...",
+    "articleUrl": "URL статьи",
+    "articleUrlPlaceholder": "Введите URL статьи...",
+    "model": "Модель",
+    "paragraphCount": "Количество абзацев",
+    "tone": "Тон",
+    "additionalInstructions": "Дополнительные инструкции",
+    "additionalInstructionsPlaceholder": "Введите дополнительные инструкции...",
+    "generate": "Сгенерировать"
+  },
+  "morningForm": {
+    "weather": "Погода",
+    "weatherTextPlaceholder": "Введите текст погоды...",
+    "news": "Новости",
+    "newsTextPlaceholder": "Введите текст новости...",
+    "newsUrlPlaceholder": "Введите URL новости...",
+    "removeNewsItem": "Удалить новость",
+    "addNewsItem": "Добавить новость",
+    "generate": "Сгенерировать"
+  }
+}
