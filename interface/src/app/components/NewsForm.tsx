@@ -45,15 +45,20 @@ export const NewsForm = () => {
   const isGeneratorReady =
     values.selectedModel && prompt && settings?.news_header_prompt;
 
-  console.log('isGeneratorReady', prompt);
-
   useEffect(() => {
     if (settings?.news_prompt) setPrompt(settings.news_prompt);
     if (settings?.tones) {
       const tone = parseTones(settings.tones)[0];
       setFieldValue('selectedTone', tone);
     }
-  }, [settings?.news_prompt, settings?.tones, setFieldValue]);
+    if (settings?.default_model)
+      setFieldValue('selectedModel', settings.default_model);
+  }, [
+    settings?.news_prompt,
+    settings?.tones,
+    settings?.default_model,
+    setFieldValue,
+  ]);
 
   return (
     <form onSubmit={handleSubmit}>

@@ -44,7 +44,7 @@ export default function BasicTabs() {
   };
 
   return (
-    <Box maxWidth="md" minWidth={0}>
+    <Box maxWidth="sm">
       <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
         <Tabs
           value={value}
