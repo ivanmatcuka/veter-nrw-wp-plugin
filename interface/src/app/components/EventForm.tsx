@@ -17,7 +17,10 @@ export const EventForm: FC<EventFormProps> = ({ daytime }) => {
   const { settings } = useSettings();
   const [showGeneratedResponse, setShowGeneratedResponse] = useState(false);
 
-  const { t } = useTranslation(['morningForm', 'common']);
+  const { t } = useTranslation([
+    daytime === 'morning' ? 'morningForm' : 'eveningForm',
+    'common',
+  ]);
 
   const { values, handleChange, setFieldValue, handleSubmit } = useFormik({
     initialValues: {
@@ -63,21 +66,27 @@ export const EventForm: FC<EventFormProps> = ({ daytime }) => {
     });
   }, [settings, setFieldValue, daytime]);
 
-  const daytimeSettings = useMemo(() => {
-    return {
+  const weatherPrompt = useMemo(
+    () =>
+      daytime === 'morning'
+        ? stringInject(values.weather_prompt || '', {
+            weather: values.weatherText || '',
+          })
+        : null,
+    [daytime, values],
+  );
+
+  const daytimeSettings = useMemo(
+    () => ({
       textHeader: values[`${daytime}_text_header`] || '',
       textBefore: values[`${daytime}_text_before`] || '',
       textBlockHeader: values[`${daytime}_text_block_header`] || '',
       textAfter: values[`${daytime}_text_after`] || '',
-      weatherPrompt:
-        daytime === 'morning'
-          ? stringInject(values.weather_morning_prompt || '', {
-              weather: values.weatherText || '',
-            })
-          : null,
+      weatherPrompt,
       newsPrompt: values[`${daytime}_prompt`] || '',
-    };
-  }, [values, daytime]);
+    }),
+    [values, weatherPrompt, daytime],
+  );
 
   return (
     <form onSubmit={handleSubmit}>
@@ -113,7 +122,6 @@ export const EventForm: FC<EventFormProps> = ({ daytime }) => {
             value={daytimeSettings.textHeader}
             onChange={handleChange}
             multiline
-            rows={1}
             required
           />
           <TextField
@@ -123,7 +131,6 @@ export const EventForm: FC<EventFormProps> = ({ daytime }) => {
             value={daytimeSettings.textBefore}
             onChange={handleChange}
             multiline
-            rows={1}
             required
           />
           <TextField
@@ -133,7 +140,6 @@ export const EventForm: FC<EventFormProps> = ({ daytime }) => {
             value={daytimeSettings.textBlockHeader}
             onChange={handleChange}
             multiline
-            rows={1}
             required
           />
           <TextField
@@ -143,7 +149,6 @@ export const EventForm: FC<EventFormProps> = ({ daytime }) => {
             value={daytimeSettings.textAfter}
             onChange={handleChange}
             multiline
-            rows={1}
             required
           />
         </Section>
@@ -175,6 +180,7 @@ export const EventForm: FC<EventFormProps> = ({ daytime }) => {
               {...daytimeSettings}
               daytime={daytime}
               news={values.news || []}
+              updateNews={handleUpdateNewsItem}
               selectedModel={values.selectedModel || ''}
             />
           )}

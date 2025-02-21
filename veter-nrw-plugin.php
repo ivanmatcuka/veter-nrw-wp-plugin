@@ -43,7 +43,7 @@ class VeterNRWPlugin
         'type' => 'select',
         'label' => 'Default Model',
         'options' => [
-          'Chat GPT',
+          'ChatGPT',
           'Claude',
         ],
       ],
@@ -101,17 +101,13 @@ class VeterNRWPlugin
         'type' => 'textarea',
         'label' => 'Morning Prompt',
       ],
-      'weather_morning_prompt' => [
+      'weather_prompt' => [
         'type' => 'textarea',
-        'label' => 'Weather Morning Prompt',
+        'label' => 'Weather Prompt',
       ],
       'evening_prompt' => [
         'type' => 'textarea',
         'label' => 'Evening Prompt',
-      ],
-      'weather_evening_prompt' => [
-        'type' => 'textarea',
-        'label' => 'Weather Evening Prompt',
       ],
     ]
   ];
@@ -248,6 +244,11 @@ class VeterNRWPlugin
       'callback' => [$this, 'getSettings'],
       'permission_callback' => '__return_true'
     ]);
+    register_rest_route('veter-nrw-plugin/v1', '/create-draft', [
+      'methods' => 'POST',
+      'callback' => [$this, 'createPost'],
+      'permission_callback' => '__return_true'
+    ]);
   }
 
   public function getSettings()
@@ -261,6 +262,16 @@ class VeterNRWPlugin
     }
 
     return rest_ensure_response($settings);
+  }
+
+  public function createPost($request)
+  {
+    return rest_ensure_response(wp_insert_post([
+      'post_type' => 'post',
+      'post_title' => $request['title'],
+      'post_content' => $request['content'],
+      'post_status' => 'draft',
+    ]));
   }
 
   private function getOutput()

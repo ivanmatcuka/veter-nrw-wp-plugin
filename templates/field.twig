@@ -1,14 +1,14 @@
 {% switch field.type %}
   {% case 'text' %}
-    <input type="text" id="{{ key }}" name="{{ key }}" value="{{ value }}" class="regular-text">
+    <input type="text" id="{{ key }}" name="{{ key }}" value="{{ value }}" class="regular-text" required>
   {% case 'select' %}
-    <select id="{{ key }}" name="{{ key }}">
+    <select id="{{ key }}" name="{{ key }}" required>
       {% for option in field.options %}
         <option value="{{ option }}" {{ option == value ? 'selected' : '' }}>{{ option }}</option>
       {% endfor %}
     </select>
   {% case 'textarea' %}
-    <textarea id="{{ key }}" name="{{ key }}" rows="5" cols="50" class="large-text">{{ value }}</textarea>
+    <textarea id="{{ key }}" name="{{ key }}" rows="5" cols="50" class="large-text" required>{{ value }}</textarea>
   {% default %}
     No input type specified
 {% endswitch %}

@@ -4,9 +4,13 @@ import {
   ReactNode,
   useContext,
   useEffect,
+  useMemo,
   useState,
 } from 'react';
 
+import { Page } from '@/components/Page';
+import { Typography } from '@mui/material';
+import { useTranslation } from 'react-i18next';
 import { getSettings, SettingsResponse } from './service';
 type SettingsContextType = {
   settings: Partial<SettingsResponse>;
@@ -20,14 +24,29 @@ export const AI_MODELS = ['ChatGPT', 'Claude'];
 
 export const SettingsProvider: FC<{ children: ReactNode }> = ({ children }) => {
   const [settings, setSettings] = useState<Partial<SettingsResponse>>({});
+  const { t } = useTranslation('common');
+
+  const isSettingsValid = useMemo(
+    () => Object.values(settings).every(Boolean),
+    [settings],
+  );
 
   useEffect(() => {
     getSettings().then((settings) => {
       if (!settings) return;
-
       setSettings(settings);
     });
   }, []);
+
+  if (!isSettingsValid) {
+    return (
+      <Page>
+        <Typography variant="h6" gutterBottom>
+          {t('settingsError')}
+        </Typography>
+      </Page>
+    );
+  }
 
   return (
     <SettingsContext.Provider

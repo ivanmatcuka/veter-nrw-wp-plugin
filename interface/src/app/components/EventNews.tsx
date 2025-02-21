@@ -7,6 +7,7 @@ export type News = Partial<{
   text: string;
   url: string;
   extra: string;
+  result?: string;
 }>[];
 
 type EventNewsProps = {
@@ -28,7 +29,10 @@ export const EventNews: FC<EventNewsProps> = ({
   handleRemoveNewsItem,
   handleUpdateNewsItem,
 }) => {
-  const { t } = useTranslation(['morningForm', 'common']);
+  const { t } = useTranslation([
+    daytime === 'morning' ? 'morningForm' : 'eveningForm',
+    'common',
+  ]);
   const chipPrefix = daytime === 'morning' ? 'news' : 'event';
 
   return (
@@ -58,7 +62,6 @@ export const EventNews: FC<EventNewsProps> = ({
           <TextField
             fullWidth
             multiline
-            rows={1}
             label={t('newsUrlPlaceholder')}
             value={item.url}
             onChange={(e) => handleUpdateNewsItem(index, 'url', e.target.value)}
@@ -77,7 +80,6 @@ export const EventNews: FC<EventNewsProps> = ({
           <TextField
             fullWidth
             multiline
-            rows={1}
             label={t('additionalInstructionsPlaceholder')}
             value={item.extra}
             onChange={(e) =>

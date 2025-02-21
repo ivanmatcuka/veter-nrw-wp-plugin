@@ -81,7 +81,6 @@ export const NewsForm = () => {
             value={values.newsUrl}
             name="newsUrl"
             multiline
-            rows={1}
             onChange={handleChange}
             required
           />

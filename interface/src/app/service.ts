@@ -23,8 +23,7 @@ export type SettingsResponse = {
   news_header_prompt: string;
   morning_prompt: string;
   evening_prompt: string;
-  weather_morning_prompt: string;
-  weather_evening_prompt: string;
+  weather_prompt: string;
   tones: string;
 
   // TODO: check
@@ -40,6 +39,31 @@ export const getSettings = async (): Promise<SettingsResponse | null> => {
         headers: {
           'Content-Type': 'application/json',
         },
+      },
+    );
+
+    if (!response.ok) {
+      throw new Error('Failed to get tones');
+    }
+
+    return await response.json();
+  } catch {
+    return null;
+  }
+};
+
+export const createDraft = async (
+  formData: FormData,
+): Promise<number | null> => {
+  try {
+    const response = await fetch(
+      `${API_URL}/wp-json/veter-nrw-plugin/v1/create-draft`,
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(Object.fromEntries(formData)),
       },
     );
 

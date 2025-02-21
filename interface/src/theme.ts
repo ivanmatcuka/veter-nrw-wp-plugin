@@ -19,6 +19,13 @@ const theme = createTheme({
         disableElevation: true,
       },
     },
+    MuiAccordionSummary: {
+      styleOverrides: {
+        content: {
+          width: '100%',
+        },
+      },
+    },
   },
   cssVariables: true,
 });
