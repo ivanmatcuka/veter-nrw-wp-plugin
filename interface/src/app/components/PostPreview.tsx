@@ -1,9 +1,9 @@
 import { Box, Button, Typography } from '@mui/material';
-import { FC, PropsWithChildren, useCallback, useMemo, useState } from 'react';
+import { FC, PropsWithChildren, useCallback, useState } from 'react';
 import stringInject from 'stringinject';
 
 import { useTranslation } from 'react-i18next';
-import { createDraft } from '../service';
+import { createDaytimeDraft } from '../service';
 import { News } from './EventNews';
 import { GeneratedResponse } from './GeneratedResponse';
 
@@ -38,37 +38,28 @@ export const PostPreview: FC<PropsWithChildren<PostPreviewProps>> = ({
   const [postDraftId, setPostDraftId] = useState<number | null>(null);
   const [generatedWeatherText, setGeneratedWeatherText] = useState('');
 
-  const newsContent = useMemo(
-    () => news.map((item) => item.result).join('\n\n'),
-    [news],
-  );
-  const content = useMemo(() => {
-    return `
-      ${textBefore}
-      ${generatedWeatherText}
-      ${textBlockHeader}
-      ${newsContent}
-      ${textAfter}
-    `;
-  }, [
-    textBefore,
-    generatedWeatherText,
-    textBlockHeader,
-    newsContent,
-    textAfter,
-  ]);
-
   const postDraft = useCallback(async () => {
     setIsLoading(true);
 
     const formData = new FormData();
-    formData.append('content', content);
     formData.append('title', textHeader);
+    formData.append('weather', generatedWeatherText);
+    formData.append('news', JSON.stringify(news));
+    formData.append('textBefore', textBefore);
+    formData.append('textBlockHeader', textBlockHeader);
+    formData.append('textAfter', textAfter);
 
-    setPostDraftId(await createDraft(formData));
+    setPostDraftId(await createDaytimeDraft(formData));
 
     setIsLoading(false);
-  }, [textHeader, content]);
+  }, [
+    textHeader,
+    generatedWeatherText,
+    news,
+    textBefore,
+    textAfter,
+    textBlockHeader,
+  ]);
 
   const getNewsRenderedPrompt = useCallback(
     (item: News[number]) =>

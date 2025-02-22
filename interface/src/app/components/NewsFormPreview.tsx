@@ -3,7 +3,7 @@ import stringInject from 'stringinject';
 import { Box, Button } from '@mui/material';
 import { FC, useCallback, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { createDraft } from '../service';
+import { createNewsDraft } from '../service';
 import { GeneratedResponse } from './GeneratedResponse';
 
 type NewsFormPreviewProps = {
@@ -41,7 +41,7 @@ export const NewsFormPreview: FC<NewsFormPreviewProps> = ({
     formData.append('content', generatedNewsText);
     formData.append('title', generatedNewsHeader);
 
-    setPostDraftId(await createDraft(formData));
+    setPostDraftId(await createNewsDraft(formData));
 
     setIsLoading(false);
   }, [generatedNewsText, generatedNewsHeader]);

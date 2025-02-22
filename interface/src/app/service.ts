@@ -52,12 +52,37 @@ export const getSettings = async (): Promise<SettingsResponse | null> => {
   }
 };
 
-export const createDraft = async (
+export const createNewsDraft = async (
   formData: FormData,
 ): Promise<number | null> => {
   try {
     const response = await fetch(
-      `${API_URL}/wp-json/veter-nrw-plugin/v1/create-draft`,
+      `${API_URL}/wp-json/veter-nrw-plugin/v1/create-news-draft`,
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(Object.fromEntries(formData)),
+      },
+    );
+
+    if (!response.ok) {
+      throw new Error('Failed to get tones');
+    }
+
+    return await response.json();
+  } catch {
+    return null;
+  }
+};
+
+export const createDaytimeDraft = async (
+  formData: FormData,
+): Promise<number | null> => {
+  try {
+    const response = await fetch(
+      `${API_URL}/wp-json/veter-nrw-plugin/v1/create-daytime-draft`,
       {
         method: 'POST',
         headers: {

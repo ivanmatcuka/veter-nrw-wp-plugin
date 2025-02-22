@@ -1,0 +1,23 @@
+{% if weather %}
+<!-- wp:paragraph -->
+<p>{{ weather }}</p>
+<!-- /wp:paragraph -->
+{% endif %}
+
+<!-- wp:paragraph -->
+<p>{{ textBefore }}</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:heading {"level":2} -->
+<h2>{{ textBlockHeader }}</h2>
+<!-- /wp:heading -->
+
+<!-- wp:paragraph -->
+{% for item in news %}
+<p>{{ item.text }}</p>
+{% endfor %}
+<!-- /wp:paragraph -->
+
+<!-- wp:paragraph -->
+<p>{{ textAfter }}</p>
+<!-- /wp:paragraph -->

@@ -244,9 +244,14 @@ class VeterNRWPlugin
       'callback' => [$this, 'getSettings'],
       'permission_callback' => '__return_true'
     ]);
-    register_rest_route('veter-nrw-plugin/v1', '/create-draft', [
+    register_rest_route('veter-nrw-plugin/v1', '/create-news-draft', [
       'methods' => 'POST',
-      'callback' => [$this, 'createPost'],
+      'callback' => [$this, 'createNewsDraft'],
+      'permission_callback' => '__return_true'
+    ]);
+    register_rest_route('veter-nrw-plugin/v1', '/create-daytime-draft', [
+      'methods' => 'POST',
+      'callback' => [$this, 'createDaytimeDraft'],
       'permission_callback' => '__return_true'
     ]);
   }
@@ -264,12 +269,37 @@ class VeterNRWPlugin
     return rest_ensure_response($settings);
   }
 
-  public function createPost($request)
+  public function createNewsDraft($request)
   {
     return rest_ensure_response(wp_insert_post([
       'post_type' => 'post',
       'post_title' => $request['title'],
-      'post_content' => $request['content'],
+      'post_content' => sanitize_text_field($request['content']),
+      'post_status' => 'draft',
+    ]));
+  }
+
+  public function createDaytimeDraft($request)
+  {
+    $weather = $request['weather'];
+    $news = $request['news'];
+    $textBefore = $request['textBefore'];
+    $textBlockHeader = $request['textBlockHeader'];
+    $textAfter = $request['textAfter'];
+
+    $blocks = $this->twig->render('post.twig', [
+      'weather' => $weather,
+      'textBefore' => $textBefore,
+      'textBlockHeader' => $textBlockHeader,
+      'news' => json_decode($news),
+      'textAfter' => $textAfter,
+    ]);
+
+
+    return rest_ensure_response(wp_insert_post([
+      'post_type' => 'post',
+      'post_title' => $request['title'],
+      'post_content' => $blocks,
       'post_status' => 'draft',
     ]));
   }
