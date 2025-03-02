@@ -1,194 +1,181 @@
 import { Page } from '@/components/Page';
-import { Button, FormControlLabel, Radio, TextField } from '@mui/material';
-import { useFormik } from 'formik';
-import { FC, useCallback, useEffect, useMemo, useState } from 'react';
+import { FormControlLabel, Radio, TextField } from '@mui/material';
+import { FC, useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import stringInject from 'stringinject';
 
 import { Section } from '@/components/Section';
 import { AI_MODELS, useSettings } from '../SettingsContext';
 import { EventNews, News } from './EventNews';
 import { PostPreview } from './PostPreview';
 
+type DaytimeSettings = {
+  textHeader: string;
+  textBefore: string;
+  textBlockHeader: string;
+  textAfter: string;
+};
 type EventFormProps = {
   daytime: 'morning' | 'evening';
 };
 export const EventForm: FC<EventFormProps> = ({ daytime }) => {
+  const [news, setNews] = useState<News>([{ text: '', url: '', extra: '' }]);
+  const [weatherText, setWeatherText] = useState('');
+  const [selectedModel, setSelectedModel] = useState(AI_MODELS[0]);
+  const [daytimeSettings, setDaytimeSettings] = useState<DaytimeSettings>({
+    textHeader: '',
+    textBefore: '',
+    textBlockHeader: '',
+    textAfter: '',
+  });
+
   const { settings } = useSettings();
-  const [showGeneratedResponse, setShowGeneratedResponse] = useState(false);
 
   const { t } = useTranslation([
     daytime === 'morning' ? 'morningForm' : 'eveningForm',
     'common',
   ]);
 
-  const { values, handleChange, setFieldValue, handleSubmit } = useFormik({
-    initialValues: {
-      ...settings,
-      weatherText: '',
-      selectedModel: AI_MODELS[0],
-      news: [{}] as News,
-    },
-    onSubmit: () => setShowGeneratedResponse(true),
-  });
-
   const handleAddNewsItem = useCallback(() => {
-    setFieldValue('news', [...values.news, { text: '', url: '', extra: '' }]);
-  }, [setFieldValue, values.news]);
+    setNews([...news, { text: '', url: '', extra: '' }]);
+  }, [news]);
 
   const handleRemoveNewsItem = useCallback(
     (index: number) => {
-      const newNews = values.news.filter((_, i) => i !== index);
-      setFieldValue('news', newNews);
+      const newNews = news.filter((_, i) => i !== index);
+      setNews(newNews);
     },
-    [setFieldValue, values.news],
+    [news],
   );
 
   const handleUpdateNewsItem = useCallback(
     (index: number, field: keyof News[0], value: string) => {
-      const newNews = [...values.news];
+      const newNews = [...news];
       newNews[index] = { ...newNews[index], [field]: value };
-      setFieldValue('news', newNews);
+      setNews(newNews);
     },
-    [setFieldValue, values.news],
+    [news],
   );
 
   useEffect(() => {
-    if (!settings) return;
-
-    [
-      `${daytime}_text_header`,
-      `${daytime}_text_before`,
-      `${daytime}_text_block_header`,
-      `${daytime}_text_after`,
-    ].forEach((key) => {
-      if (settings[key]) setFieldValue(key, settings[key]);
+    setDaytimeSettings({
+      textHeader: settings[`${daytime}_text_header`] || '',
+      textBefore: settings[`${daytime}_text_before`] || '',
+      textBlockHeader: settings[`${daytime}_text_block_header`] || '',
+      textAfter: settings[`${daytime}_text_after`] || '',
     });
-  }, [settings, setFieldValue, daytime]);
-
-  const weatherPrompt = useMemo(
-    () =>
-      daytime === 'morning'
-        ? stringInject(values.weather_prompt || '', {
-            weather: values.weatherText || ' ',
-          })
-        : null,
-    [daytime, values],
-  );
-
-  const daytimeSettings = useMemo(
-    () => ({
-      textHeader: values[`${daytime}_text_header`] || '',
-      textBefore: values[`${daytime}_text_before`] || '',
-      textBlockHeader: values[`${daytime}_text_block_header`] || '',
-      textAfter: values[`${daytime}_text_after`] || '',
-      weatherPrompt,
-      newsPrompt: values[`${daytime}_prompt`] || '',
-    }),
-    [values, weatherPrompt, daytime],
-  );
+  }, [settings, daytime]);
 
   return (
-    <form onSubmit={handleSubmit}>
-      <Page>
-        {daytime === 'morning' && (
-          <Section title={t('weather')} chip="{weather}">
-            <TextField
-              fullWidth
-              multiline
-              maxRows={20}
-              name="weatherText"
-              value={values.weatherText}
-              onChange={handleChange}
-              required
-            />
-          </Section>
-        )}
-
-        <Section title={t('news')}>
-          <EventNews
-            news={values.news}
-            daytime={daytime}
-            handleAddNewsItem={handleAddNewsItem}
-            handleRemoveNewsItem={handleRemoveNewsItem}
-            handleUpdateNewsItem={handleUpdateNewsItem}
-          />
-        </Section>
-
-        <Section title={t('text')}>
+    <Page>
+      {daytime === 'morning' && (
+        <Section title={t('weather')} chip="{weather}">
           <TextField
             fullWidth
-            label={t('textHeaderPlaceholder')}
-            name={`${daytime}_text_header`}
-            value={daytimeSettings.textHeader}
-            onChange={handleChange}
-            multiline
-            required
-          />
-          <TextField
-            fullWidth
-            label={t('textBeforePlaceholder')}
-            name={`${daytime}_text_before`}
-            value={daytimeSettings.textBefore}
-            onChange={handleChange}
             multiline
             maxRows={20}
-            required
-          />
-          <TextField
-            fullWidth
-            label={t('textBlockHeaderPlaceholder')}
-            name={`${daytime}_text_block_header`}
-            value={daytimeSettings.textBlockHeader}
-            onChange={handleChange}
-            multiline
-            required
-          />
-          <TextField
-            fullWidth
-            label={t('textAfterPlaceholder')}
-            name={`${daytime}_text_after`}
-            maxRows={20}
-            value={daytimeSettings.textAfter}
-            onChange={handleChange}
-            multiline
+            name="weatherText"
+            value={weatherText}
+            onChange={(event) => setWeatherText(event.target.value)}
             required
           />
         </Section>
+      )}
 
-        <Section title={t('model')}>
-          <div>
-            {AI_MODELS.map((model) => (
-              <FormControlLabel
-                key={model}
-                control={
-                  <Radio
-                    checked={values.selectedModel === model}
-                    onChange={() => setFieldValue('selectedModel', model)}
-                  />
-                }
-                label={model}
-              />
-            ))}
-          </div>
-        </Section>
+      <Section title={t('news')}>
+        <EventNews
+          news={news}
+          daytime={daytime}
+          handleAddNewsItem={handleAddNewsItem}
+          handleRemoveNewsItem={handleRemoveNewsItem}
+          handleUpdateNewsItem={handleUpdateNewsItem}
+        />
+      </Section>
 
-        <Section>
-          {!showGeneratedResponse ? (
-            <Button variant="contained" type="submit">
-              {t('generate')}
-            </Button>
-          ) : (
-            <PostPreview
-              {...daytimeSettings}
-              daytime={daytime}
-              news={values.news || []}
-              updateNews={handleUpdateNewsItem}
-              selectedModel={values.selectedModel || ''}
+      <Section title={t('text')}>
+        <TextField
+          fullWidth
+          label={t('textHeaderPlaceholder')}
+          value={daytimeSettings.textHeader}
+          onChange={(e) =>
+            setDaytimeSettings({
+              ...daytimeSettings,
+              textHeader: e.target.value,
+            })
+          }
+          multiline
+          required
+        />
+        <TextField
+          fullWidth
+          label={t('textBeforePlaceholder')}
+          value={daytimeSettings.textBefore}
+          onChange={(e) =>
+            setDaytimeSettings({
+              ...daytimeSettings,
+              textBefore: e.target.value,
+            })
+          }
+          multiline
+          maxRows={20}
+          required
+        />
+        <TextField
+          fullWidth
+          label={t('textBlockHeaderPlaceholder')}
+          value={daytimeSettings.textBlockHeader}
+          onChange={(e) =>
+            setDaytimeSettings({
+              ...daytimeSettings,
+              textBlockHeader: e.target.value,
+            })
+          }
+          multiline
+          required
+        />
+        <TextField
+          fullWidth
+          label={t('textAfterPlaceholder')}
+          maxRows={20}
+          value={daytimeSettings.textAfter}
+          onChange={(e) =>
+            setDaytimeSettings({
+              ...daytimeSettings,
+              textAfter: e.target.value,
+            })
+          }
+          multiline
+          required
+        />
+      </Section>
+
+      <Section title={t('model')}>
+        <div>
+          {AI_MODELS.map((model) => (
+            <FormControlLabel
+              key={model}
+              control={
+                <Radio
+                  checked={selectedModel === model}
+                  onChange={() => setSelectedModel(model)}
+                />
+              }
+              label={model}
             />
-          )}
-        </Section>
-      </Page>
-    </form>
+          ))}
+        </div>
+      </Section>
+
+      <Section>
+        <PostPreview
+          {...daytimeSettings}
+          newsPrompt={settings[`${daytime}_prompt`] || ''}
+          weatherText={weatherText}
+          daytime={daytime}
+          news={news ?? []}
+          updateNews={handleUpdateNewsItem}
+          selectedModel={selectedModel || ''}
+        />
+      </Section>
+    </Page>
   );
 };

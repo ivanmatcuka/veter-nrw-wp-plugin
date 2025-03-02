@@ -98,7 +98,6 @@ export const NewsForm = () => {
           {AI_MODELS.map((model, index) => (
             <FormControlLabel
               key={index}
-              defaultValue={settings.default_model}
               value={model}
               name="selectedModel"
               onChange={(e) =>
