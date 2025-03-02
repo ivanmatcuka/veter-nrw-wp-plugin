@@ -19,10 +19,29 @@ const theme = createTheme({
         disableElevation: true,
       },
     },
+    MuiAlert: {
+      styleOverrides: {
+        message: {
+          flex: 1,
+        },
+      },
+    },
     MuiAccordionSummary: {
       styleOverrides: {
         content: {
           width: '100%',
+        },
+      },
+    },
+    MuiButtonBase: {
+      defaultProps: {
+        disableRipple: true,
+      },
+    },
+    MuiInputBase: {
+      styleOverrides: {
+        root: {
+          padding: 0,
         },
       },
     },

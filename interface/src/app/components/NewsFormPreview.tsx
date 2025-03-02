@@ -1,7 +1,7 @@
 import stringInject from 'stringinject';
 
 import { Box, Button } from '@mui/material';
-import { FC, useCallback, useMemo, useState } from 'react';
+import { FC, useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { createNewsDraft } from '../service';
 import { GeneratedResponse } from './GeneratedResponse';
@@ -13,8 +13,7 @@ type NewsFormPreviewProps = {
   selectedTone: string;
   additionalInstructions: string;
   newsText: string;
-  newsUrl: string;
-  newsHeaderPrompt: string;
+  isReady: boolean;
 };
 
 export const NewsFormPreview: FC<NewsFormPreviewProps> = ({
@@ -24,13 +23,12 @@ export const NewsFormPreview: FC<NewsFormPreviewProps> = ({
   selectedTone,
   additionalInstructions,
   newsText,
-  newsUrl,
-  newsHeaderPrompt,
+  isReady,
 }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [postDraftId, setPostDraftId] = useState<number | null>(null);
   const [generatedNewsText, setGeneratedNewsText] = useState('');
-  const [generatedNewsHeader, setGeneratedNewsHeader] = useState('');
+  const [newsRenderedPrompt, setNewsRenderedPrompt] = useState<string>('');
 
   const { t } = useTranslation('common');
 
@@ -39,37 +37,27 @@ export const NewsFormPreview: FC<NewsFormPreviewProps> = ({
 
     const formData = new FormData();
     formData.append('content', generatedNewsText);
-    formData.append('title', generatedNewsHeader);
 
     setPostDraftId(await createNewsDraft(formData));
-
     setIsLoading(false);
-  }, [generatedNewsText, generatedNewsHeader]);
+  }, [generatedNewsText]);
 
-  const newsRenderedPrompt = useMemo(
-    () =>
+  useEffect(() => {
+    setNewsRenderedPrompt(
       stringInject(newsPrompt, {
         count: paragraphCount,
         tone: selectedTone,
-        add: additionalInstructions,
+        add: additionalInstructions || ' ',
         news_text: newsText,
       }),
-    [
-      newsPrompt,
-      paragraphCount,
-      selectedTone,
-      additionalInstructions,
-      newsText,
-    ],
-  );
-
-  const newsHeaderRenderedPrompt = useMemo(
-    () =>
-      stringInject(newsHeaderPrompt, {
-        url: newsUrl,
-      }),
-    [newsHeaderPrompt, newsUrl],
-  );
+    );
+  }, [
+    newsPrompt,
+    paragraphCount,
+    selectedTone,
+    additionalInstructions,
+    newsText,
+  ]);
 
   return (
     <Box display="flex" flexDirection="column" gap={2}>
@@ -77,25 +65,24 @@ export const NewsFormPreview: FC<NewsFormPreviewProps> = ({
         model={selectedModel}
         prompt={newsRenderedPrompt}
         onReady={setGeneratedNewsText}
-      />
-      <GeneratedResponse
-        model={selectedModel}
-        prompt={newsHeaderRenderedPrompt}
-        onReady={setGeneratedNewsHeader}
+        onChange={setNewsRenderedPrompt}
+        isReady={isReady}
       />
       {postDraftId ? (
         <Button
           href={`/wp-admin/post.php?post=${postDraftId}&action=edit`}
           target="_blank"
           variant="contained"
-          disabled={!generatedNewsText || !generatedNewsHeader}
+          disabled={!generatedNewsText}
         >
           {t('openDraft')}
         </Button>
       ) : (
-        <Button variant="contained" loading={isLoading} onClick={postDraft}>
-          {t('postDraft')}
-        </Button>
+        generatedNewsText && (
+          <Button variant="contained" loading={isLoading} onClick={postDraft}>
+            {t('postDraft')}
+          </Button>
+        )
       )}
     </Box>
   );

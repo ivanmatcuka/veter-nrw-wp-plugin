@@ -43,6 +43,7 @@ export const EventNews: FC<EventNewsProps> = ({
             fullWidth
             multiline
             label={t('newsTextPlaceholder')}
+            maxRows={20}
             value={item.text}
             onChange={(e) =>
               handleUpdateNewsItem(index, 'text', e.target.value)
@@ -80,6 +81,7 @@ export const EventNews: FC<EventNewsProps> = ({
           <TextField
             fullWidth
             multiline
+            maxRows={20}
             label={t('additionalInstructionsPlaceholder')}
             value={item.extra}
             onChange={(e) =>

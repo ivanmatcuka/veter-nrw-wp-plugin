@@ -70,7 +70,7 @@ export const EventForm: FC<EventFormProps> = ({ daytime }) => {
     () =>
       daytime === 'morning'
         ? stringInject(values.weather_prompt || '', {
-            weather: values.weatherText || '',
+            weather: values.weatherText || ' ',
           })
         : null,
     [daytime, values],
@@ -96,6 +96,7 @@ export const EventForm: FC<EventFormProps> = ({ daytime }) => {
             <TextField
               fullWidth
               multiline
+              maxRows={20}
               name="weatherText"
               value={values.weatherText}
               onChange={handleChange}
@@ -131,6 +132,7 @@ export const EventForm: FC<EventFormProps> = ({ daytime }) => {
             value={daytimeSettings.textBefore}
             onChange={handleChange}
             multiline
+            maxRows={20}
             required
           />
           <TextField
@@ -146,6 +148,7 @@ export const EventForm: FC<EventFormProps> = ({ daytime }) => {
             fullWidth
             label={t('textAfterPlaceholder')}
             name={`${daytime}_text_after`}
+            maxRows={20}
             value={daytimeSettings.textAfter}
             onChange={handleChange}
             multiline

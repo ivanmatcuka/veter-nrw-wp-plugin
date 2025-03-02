@@ -25,12 +25,16 @@ import { useSettings } from '../SettingsContext';
 type GeneratedResponseProps = {
   model: string;
   prompt: string;
+  isReady: boolean;
   onReady?: (value: string) => void;
+  onChange?: (value: string) => void;
 };
 export const GeneratedResponse: FC<GeneratedResponseProps> = ({
   model,
   prompt,
+  isReady,
   onReady,
+  onChange,
 }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [cachedTexts, setCachedTexts] = useState<string[]>([]);
@@ -87,8 +91,12 @@ export const GeneratedResponse: FC<GeneratedResponseProps> = ({
   );
 
   return (
-    <Box display="flex" gap={2} component="form" alignItems="flex-start">
-      <IconButton onClick={handleGenerate} loading={isLoading}>
+    <Box display="flex" gap={2} component="div" alignItems="flex-start">
+      <IconButton
+        onClick={handleGenerate}
+        loading={isLoading}
+        disabled={!isReady}
+      >
         <ReplayIcon fontSize="small" />
       </IconButton>
       <Box
@@ -127,8 +135,24 @@ export const GeneratedResponse: FC<GeneratedResponseProps> = ({
             </Typography>
           </AccordionSummary>
           <AccordionDetails>
-            <Alert color={error ? 'error' : 'info'} icon={<AutoAwesome />}>
-              <Typography variant="body2">{prompt}</Typography>
+            <Alert
+              color={error || !isReady ? 'error' : 'info'}
+              icon={<AutoAwesome />}
+            >
+              <TextField
+                fullWidth
+                multiline
+                value={prompt}
+                onChange={(event) => onChange?.(event.target.value)}
+                variant="standard"
+                disabled={!isReady}
+                slotProps={{
+                  input: {
+                    disableUnderline: true,
+                    fullWidth: true,
+                  },
+                }}
+              />
             </Alert>
           </AccordionDetails>
         </Accordion>

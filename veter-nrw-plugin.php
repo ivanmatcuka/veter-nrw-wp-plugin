@@ -273,7 +273,7 @@ class VeterNRWPlugin
   {
     return rest_ensure_response(wp_insert_post([
       'post_type' => 'post',
-      'post_title' => $request['title'],
+      'post_title' => sanitize_text_field($request['title']),
       'post_content' => sanitize_text_field($request['content']),
       'post_status' => 'draft',
     ]));
@@ -288,11 +288,11 @@ class VeterNRWPlugin
     $textAfter = $request['textAfter'];
 
     $blocks = $this->twig->render('post.twig', [
-      'weather' => $weather,
-      'textBefore' => $textBefore,
-      'textBlockHeader' => $textBlockHeader,
+      'weather' => sanitize_text_field($weather),
+      'textBefore' => sanitize_text_field($textBefore),
+      'textBlockHeader' => sanitize_text_field($textBlockHeader),
       'news' => json_decode($news),
-      'textAfter' => $textAfter,
+      'textAfter' => sanitize_text_field($textAfter),
     ]);
 
 
