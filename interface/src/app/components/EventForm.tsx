@@ -4,6 +4,7 @@ import { FC, useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { Section } from '@/components/Section';
+import stringInject from 'stringinject';
 import { AI_MODELS, useSettings } from '../SettingsContext';
 import { EventNews, News } from './EventNews';
 import { PostPreview } from './PostPreview';
@@ -18,7 +19,6 @@ type EventFormProps = {
   daytime: 'morning' | 'evening';
 };
 export const EventForm: FC<EventFormProps> = ({ daytime }) => {
-  const [news, setNews] = useState<News>([{ text: '', url: '', extra: '' }]);
   const [weatherText, setWeatherText] = useState('');
   const [selectedModel, setSelectedModel] = useState(AI_MODELS[0]);
   const [daytimeSettings, setDaytimeSettings] = useState<DaytimeSettings>({
@@ -35,9 +35,38 @@ export const EventForm: FC<EventFormProps> = ({ daytime }) => {
     'common',
   ]);
 
+  const prefix = daytime === 'morning' ? 'news' : 'event';
+
+  const getNewsRenderedPrompt = useCallback(
+    (item: News[number]) =>
+      stringInject(settings[`${daytime}_prompt`], {
+        [`${prefix}_X_URL`]: item.url,
+        [`${prefix}_X_text`]: item.text,
+        [`${prefix}_X_add`]: item.extra || ' ',
+      }),
+    [prefix, settings, daytime],
+  );
+
+  const [news, setNews] = useState<News>([
+    {
+      text: '',
+      url: '',
+      extra: '',
+      prompt: getNewsRenderedPrompt({ text: '', url: '', extra: '' }),
+    },
+  ]);
+
   const handleAddNewsItem = useCallback(() => {
-    setNews([...news, { text: '', url: '', extra: '' }]);
-  }, [news]);
+    setNews([
+      ...news,
+      {
+        text: '',
+        url: '',
+        extra: '',
+        prompt: getNewsRenderedPrompt({ text: '', url: '', extra: '' }),
+      },
+    ]);
+  }, [news, getNewsRenderedPrompt]);
 
   const handleRemoveNewsItem = useCallback(
     (index: number) => {
@@ -51,9 +80,14 @@ export const EventForm: FC<EventFormProps> = ({ daytime }) => {
     (index: number, field: keyof News[0], value: string) => {
       const newNews = [...news];
       newNews[index] = { ...newNews[index], [field]: value };
+
+      if (field !== 'prompt' && field !== 'result') {
+        newNews[index].prompt = getNewsRenderedPrompt(newNews[index]);
+      }
+
       setNews(newNews);
     },
-    [news],
+    [news, getNewsRenderedPrompt],
   );
 
   useEffect(() => {
@@ -168,7 +202,6 @@ export const EventForm: FC<EventFormProps> = ({ daytime }) => {
       <Section>
         <PostPreview
           {...daytimeSettings}
-          newsPrompt={settings[`${daytime}_prompt`] || ''}
           weatherText={weatherText}
           daytime={daytime}
           news={news ?? []}

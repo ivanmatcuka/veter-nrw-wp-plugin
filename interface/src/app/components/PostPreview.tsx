@@ -1,5 +1,5 @@
 import { Box, Button, Typography } from '@mui/material';
-import { FC, PropsWithChildren, useCallback, useMemo, useState } from 'react';
+import { FC, PropsWithChildren, useCallback, useEffect, useState } from 'react';
 import stringInject from 'stringinject';
 
 import { useTranslation } from 'react-i18next';
@@ -17,7 +17,6 @@ type PostPreviewProps = {
   selectedModel: string;
   weatherText?: string;
   news: News;
-  newsPrompt: string;
   updateNews: (index: number, field: keyof News[0], value: string) => void;
 };
 export const PostPreview: FC<PropsWithChildren<PostPreviewProps>> = ({
@@ -29,18 +28,17 @@ export const PostPreview: FC<PropsWithChildren<PostPreviewProps>> = ({
   selectedModel,
   weatherText,
   news,
-  newsPrompt,
   updateNews,
 }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [postDraftId, setPostDraftId] = useState<number | null>(null);
   const [generatedWeatherText, setGeneratedWeatherText] = useState('');
+  const [weatherRenderedPrompt, setWeatherRenderedPrompt] =
+    useState<string>('');
 
   const { settings } = useSettings();
 
   const { t } = useTranslation('common');
-
-  const prefix = daytime === 'morning' ? 'news' : 'event';
 
   const postDraft = useCallback(async () => {
     setIsLoading(true);
@@ -65,25 +63,15 @@ export const PostPreview: FC<PropsWithChildren<PostPreviewProps>> = ({
     textBlockHeader,
   ]);
 
-  const weatherPrompt = useMemo(
-    () =>
+  useEffect(() => {
+    setWeatherRenderedPrompt(
       daytime === 'morning'
         ? stringInject(settings.weather_prompt || '', {
             weather: weatherText || ' ',
           })
         : null,
-    [daytime, weatherText, settings.weather_prompt],
-  );
-
-  const getNewsRenderedPrompt = useCallback(
-    (item: News[number]) =>
-      stringInject(newsPrompt, {
-        [`${prefix}_X_URL`]: item.url,
-        [`${prefix}_X_text`]: item.text,
-        [`${prefix}_X_add`]: item.extra || ' ',
-      }),
-    [newsPrompt, prefix],
-  );
+    );
+  }, [daytime, weatherText, settings.weather_prompt]);
 
   return (
     <Box display="flex" flexDirection="column" gap={2}>
@@ -92,9 +80,10 @@ export const PostPreview: FC<PropsWithChildren<PostPreviewProps>> = ({
       {weatherText && (
         <GeneratedResponse
           model={selectedModel}
-          prompt={weatherPrompt}
+          prompt={weatherRenderedPrompt}
           isReady={Boolean(weatherText)}
           onReady={setGeneratedWeatherText}
+          onChange={setWeatherRenderedPrompt}
         />
       )}
       <Typography variant="h6">{textBlockHeader}</Typography>
@@ -102,9 +91,10 @@ export const PostPreview: FC<PropsWithChildren<PostPreviewProps>> = ({
         <GeneratedResponse
           key={index}
           model={selectedModel}
-          prompt={getNewsRenderedPrompt(item)}
+          prompt={item.prompt || ''}
           isReady={Boolean(item.text && item.url)}
           onReady={(text) => updateNews(index, 'result', text)}
+          onChange={(text) => updateNews(index, 'prompt', text)}
         />
       ))}
       <Typography variant="body1">{textAfter}</Typography>

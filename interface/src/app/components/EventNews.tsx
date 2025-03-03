@@ -8,6 +8,7 @@ export type News = Partial<{
   url: string;
   extra: string;
   result?: string;
+  prompt?: string;
 }>[];
 
 type EventNewsProps = {
