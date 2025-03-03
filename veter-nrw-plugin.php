@@ -271,10 +271,16 @@ class VeterNRWPlugin
 
   public function createNewsDraft($request)
   {
+    $paragraphs = $this->formatPost($request['content']);
+
+    $blocks = $this->twig->render('format.twig', [
+      'news' => array_slice($paragraphs, 1),
+    ]);
+
     return rest_ensure_response(wp_insert_post([
       'post_type' => 'post',
-      'post_title' => sanitize_text_field($request['title']),
-      'post_content' => sanitize_text_field($request['content']),
+      'post_title' => sanitize_text_field($paragraphs[0]),
+      'post_content' => $blocks,
       'post_status' => 'draft',
     ]));
   }
@@ -302,6 +308,11 @@ class VeterNRWPlugin
       'post_content' => $blocks,
       'post_status' => 'draft',
     ]));
+  }
+
+  private function formatPost($post)
+  {
+    return explode("\n", $post);
   }
 
   private function getOutput()
