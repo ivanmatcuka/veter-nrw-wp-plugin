@@ -273,14 +273,10 @@ class VeterNRWPlugin
   {
     $paragraphs = $this->formatPost($request['content']);
 
-    $blocks = $this->twig->render('format.twig', [
-      'news' => array_slice($paragraphs, 1),
-    ]);
-
     return rest_ensure_response(wp_insert_post([
       'post_type' => 'post',
       'post_title' => sanitize_text_field($paragraphs[0]),
-      'post_content' => $blocks,
+      'post_content' => $request['content'],
       'post_status' => 'draft',
     ]));
   }

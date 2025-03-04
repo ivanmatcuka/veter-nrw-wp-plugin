@@ -5,19 +5,9 @@ window.Buffer = Buffer;
 import ArrowBack from '@mui/icons-material/ArrowBackIos';
 import ArrowForward from '@mui/icons-material/ArrowForwardIos';
 import AutoAwesome from '@mui/icons-material/AutoAwesome';
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import ReplayIcon from '@mui/icons-material/Replay';
 
-import {
-  Accordion,
-  AccordionDetails,
-  AccordionSummary,
-  Alert,
-  Box,
-  IconButton,
-  TextField,
-  Typography,
-} from '@mui/material';
+import { Alert, Box, IconButton, TextField } from '@mui/material';
 import { FC, useCallback, useState } from 'react';
 import { getChatGPTResponse, getClaudeResponse } from '../service';
 import { useSettings } from '../SettingsContext';
@@ -106,56 +96,31 @@ export const GeneratedResponse: FC<GeneratedResponseProps> = ({
         gap={2}
         overflow="hidden"
       >
-        <TextField
-          multiline
-          value={error || cachedTexts[currentIndex]}
-          fullWidth
-          disabled={isLoading}
-          error={!!error}
-          color={error ? 'error' : 'info'}
-        />
-        <Accordion
-          disableGutters
-          slotProps={{
-            heading: {
-              component: 'div',
-            },
-          }}
-          sx={{
-            '&:before': {
-              display: 'none',
-            },
-            boxShadow: 'none',
-            backgroundColor: 'transparent',
-          }}
+        {cachedTexts[currentIndex] && (
+          <Box
+            dangerouslySetInnerHTML={{ __html: cachedTexts[currentIndex] }}
+            component="div"
+          />
+        )}
+        <Alert
+          color={error || !isReady ? 'error' : 'info'}
+          icon={<AutoAwesome />}
         >
-          <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-            <Typography variant="body2" noWrap>
-              {prompt}
-            </Typography>
-          </AccordionSummary>
-          <AccordionDetails>
-            <Alert
-              color={error || !isReady ? 'error' : 'info'}
-              icon={<AutoAwesome />}
-            >
-              <TextField
-                fullWidth
-                multiline
-                value={prompt}
-                onChange={(event) => onChange?.(event.target.value)}
-                variant="standard"
-                disabled={!isReady}
-                slotProps={{
-                  input: {
-                    disableUnderline: true,
-                    fullWidth: true,
-                  },
-                }}
-              />
-            </Alert>
-          </AccordionDetails>
-        </Accordion>
+          <TextField
+            fullWidth
+            multiline
+            value={prompt}
+            onChange={(event) => onChange?.(event.target.value)}
+            variant="standard"
+            disabled={!isReady}
+            slotProps={{
+              input: {
+                disableUnderline: true,
+                fullWidth: true,
+              },
+            }}
+          />
+        </Alert>
       </Box>
       <Box>
         <IconButton

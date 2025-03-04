@@ -13,9 +13,7 @@
 <!-- /wp:heading -->
 
 {% for item in news %}
-<!-- wp:paragraph -->
-<p>{{ item.text }}</p>
-<!-- /wp:paragraph -->
+{{ item.result | raw }}
 {% endfor %}
 
 <!-- wp:paragraph -->
