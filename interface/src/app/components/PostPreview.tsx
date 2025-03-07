@@ -98,20 +98,19 @@ export const PostPreview: FC<PropsWithChildren<PostPreviewProps>> = ({
         />
       ))}
       <Typography variant="body1">{textAfter}</Typography>
-      {postDraftId ? (
+      {news.some((item) => item.result) && (
+        <Button variant="contained" loading={isLoading} onClick={postDraft}>
+          {t('postDraft')}
+        </Button>
+      )}
+      {postDraftId && (
         <Button
           href={`/wp-admin/post.php?post=${postDraftId}&action=edit`}
           target="_blank"
-          variant="contained"
+          variant="outlined"
         >
           {t('openDraft')}
         </Button>
-      ) : (
-        news.some((item) => item.result) && (
-          <Button variant="contained" loading={isLoading} onClick={postDraft}>
-            {t('postDraft')}
-          </Button>
-        )
       )}
     </Box>
   );

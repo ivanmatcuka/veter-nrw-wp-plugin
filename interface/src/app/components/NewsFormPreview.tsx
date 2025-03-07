@@ -13,6 +13,7 @@ type NewsFormPreviewProps = {
   selectedTone: string;
   additionalInstructions: string;
   newsText: string;
+  newsUrl: string;
   isReady: boolean;
 };
 
@@ -23,6 +24,7 @@ export const NewsFormPreview: FC<NewsFormPreviewProps> = ({
   selectedTone,
   additionalInstructions,
   newsText,
+  newsUrl,
   isReady,
 }) => {
   const [isLoading, setIsLoading] = useState(false);
@@ -48,10 +50,12 @@ export const NewsFormPreview: FC<NewsFormPreviewProps> = ({
         count: paragraphCount,
         tone: selectedTone,
         add: additionalInstructions || ' ',
+        url: newsUrl,
         news_text: newsText,
       }),
     );
   }, [
+    newsUrl,
     newsPrompt,
     paragraphCount,
     selectedTone,
@@ -68,7 +72,12 @@ export const NewsFormPreview: FC<NewsFormPreviewProps> = ({
         onChange={setNewsRenderedPrompt}
         isReady={isReady}
       />
-      {postDraftId ? (
+      {generatedNewsText && (
+        <Button variant="contained" loading={isLoading} onClick={postDraft}>
+          {t('postDraft')}
+        </Button>
+      )}
+      {postDraftId && (
         <Button
           href={`/wp-admin/post.php?post=${postDraftId}&action=edit`}
           target="_blank"
@@ -77,12 +86,6 @@ export const NewsFormPreview: FC<NewsFormPreviewProps> = ({
         >
           {t('openDraft')}
         </Button>
-      ) : (
-        generatedNewsText && (
-          <Button variant="contained" loading={isLoading} onClick={postDraft}>
-            {t('postDraft')}
-          </Button>
-        )
       )}
     </Box>
   );

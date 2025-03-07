@@ -1,5 +1,5 @@
 import { Page } from '@/components/Page';
-import { FormControlLabel, Radio, TextField } from '@mui/material';
+import { Button, FormControlLabel, Radio, TextField } from '@mui/material';
 import { FC, useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
@@ -19,6 +19,8 @@ type EventFormProps = {
   daytime: 'morning' | 'evening';
 };
 export const EventForm: FC<EventFormProps> = ({ daytime }) => {
+  const [isSubmitted, setIsSubmitted] = useState(false);
+
   const [weatherText, setWeatherText] = useState('');
   const [selectedModel, setSelectedModel] = useState(AI_MODELS[0]);
   const [daytimeSettings, setDaytimeSettings] = useState<DaytimeSettings>({
@@ -100,7 +102,13 @@ export const EventForm: FC<EventFormProps> = ({ daytime }) => {
   }, [settings, daytime]);
 
   return (
-    <Page>
+    <Page
+      component="form"
+      onSubmit={(e) => {
+        e.preventDefault();
+        setIsSubmitted(true);
+      }}
+    >
       {daytime === 'morning' && (
         <Section title={t('weather')} chip="{weather}">
           <TextField
@@ -200,14 +208,20 @@ export const EventForm: FC<EventFormProps> = ({ daytime }) => {
       </Section>
 
       <Section>
-        <PostPreview
-          {...daytimeSettings}
-          weatherText={weatherText}
-          daytime={daytime}
-          news={news ?? []}
-          updateNews={handleUpdateNewsItem}
-          selectedModel={selectedModel || ''}
-        />
+        {isSubmitted ? (
+          <PostPreview
+            {...daytimeSettings}
+            weatherText={weatherText}
+            daytime={daytime}
+            news={news ?? []}
+            updateNews={handleUpdateNewsItem}
+            selectedModel={selectedModel || ''}
+          />
+        ) : (
+          <Button type="submit" variant="contained">
+            {t('generate')}
+          </Button>
+        )}
       </Section>
     </Page>
   );

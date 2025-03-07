@@ -1,5 +1,6 @@
 import {
   Box,
+  Button,
   FormControlLabel,
   MenuItem,
   Radio,
@@ -21,14 +22,19 @@ import { ToneSelector } from './ToneSelector';
 const PARAGRAPH_OPTIONS = [1, 2, 3, 4, 5];
 
 export const NewsForm = () => {
-  const [prompt, setPrompt] = useState('');
+  const [isSubmitted, setIsSubmitted] = useState(false);
+
+  // Fields
   const [newsText, setNewsText] = useState('');
-  const [paragraphCount, setParagraphCount] = useState(1);
+  const [newsUrl, setNewsUrl] = useState('');
+  const [paragraphCount, setParagraphCount] = useState(3);
   const [selectedModel, setSelectedModel] = useState(AI_MODELS[0]);
   const [selectedTone, setSelectedTone] = useState('neutral');
   const [additionalInstructions, setAdditionalInstructions] = useState('');
 
-  const { t } = useTranslation('newsForm');
+  const [prompt, setPrompt] = useState('');
+
+  const { t } = useTranslation(['newsForm', 'common']);
 
   const { settings } = useSettings();
 
@@ -44,7 +50,13 @@ export const NewsForm = () => {
   }, [settings?.news_prompt, settings?.tones, settings?.default_model]);
 
   return (
-    <Page>
+    <Page
+      component="form"
+      onSubmit={(e) => {
+        e.preventDefault();
+        setIsSubmitted(true);
+      }}
+    >
       <Section title={t('articleText')} chip="{news_text}">
         <TextField
           fullWidth
@@ -52,6 +64,17 @@ export const NewsForm = () => {
           maxRows={20}
           onChange={(e) => setNewsText(e.target.value)}
           value={newsText}
+          required
+        />
+      </Section>
+
+      <Section title={t('articleUrl')} chip="{url}">
+        <TextField
+          variant="outlined"
+          fullWidth
+          value={newsUrl}
+          multiline
+          onChange={(e) => setNewsUrl(e.target.value)}
           required
         />
       </Section>
@@ -111,15 +134,22 @@ export const NewsForm = () => {
       </Section>
 
       <Section>
-        <NewsFormPreview
-          selectedModel={selectedModel}
-          newsPrompt={prompt}
-          paragraphCount={paragraphCount}
-          selectedTone={selectedTone}
-          additionalInstructions={additionalInstructions}
-          newsText={newsText}
-          isReady={isReady}
-        />
+        {isSubmitted ? (
+          <NewsFormPreview
+            selectedModel={selectedModel}
+            newsPrompt={prompt}
+            paragraphCount={paragraphCount}
+            selectedTone={selectedTone}
+            additionalInstructions={additionalInstructions}
+            newsText={newsText}
+            newsUrl={newsUrl}
+            isReady={isReady}
+          />
+        ) : (
+          <Button type="submit" variant="contained">
+            {t('generate')}
+          </Button>
+        )}
       </Section>
     </Page>
   );

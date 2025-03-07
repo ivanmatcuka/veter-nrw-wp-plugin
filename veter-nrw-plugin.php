@@ -6,8 +6,8 @@
  */
 /*
 Plugin Name: Veter NRW Plugin
-Plugin URI: http://wordpress.org/plugins/hello-dolly/
-Description: This is not just a plugin, it symbolizes the hope and enthusiasm of an entire generation summed up in two words sung most famously by Louis Armstrong: Hello, Dolly. When activated you will randomly see a lyric from <cite>Hello, Dolly</cite> in the upper right of your admin screen on every page.
+Plugin URI: http://wordpress.org/plugins/veter-nrw/
+Description: This plugin is meant to generate news for Veter NRW.
 Author: Ivan Matcuka
 Version: 1.0.0
 Author URI: https://github.com/ivanmatcuka
@@ -24,93 +24,93 @@ defined('ABSPATH') or die();
 require(__DIR__ . '/vendor/autoload.php');
 
 const PLUGIN_SETTINGS = 'veter-plugin-settings';
+const FIELDS = [
+  'API Keys' => [
+    'api_chat_gpt' => [
+      'type' => 'text',
+      'label' => 'API ChatGPT',
+    ],
+    'api_claude' => [
+      'type' => 'text',
+      'label' => 'API Claude',
+    ]
+  ],
+  'Model' => [
+    'default_model' => [
+      'type' => 'select',
+      'label' => 'Default Model',
+      'options' => [
+        'ChatGPT',
+        'Claude',
+      ],
+    ],
+    'tones' => [
+      'type' => 'text',
+      'label' => 'Tones',
+    ],
+  ],
+  'Morning Text' => [
+    'morning_text_header' => [
+      'type' => 'text',
+      'label' => 'Header',
+    ],
+    'morning_text_before' => [
+      'type' => 'text',
+      'label' => 'Before',
+    ],
+    'morning_text_block_header' => [
+      'type' => 'text',
+      'label' => 'Block Header',
+    ],
+    'morning_text_after' => [
+      'type' => 'text',
+      'label' => 'After',
+    ]
+  ],
+  'Evening Text' => [
+    'evening_text_header' => [
+      'type' => 'text',
+      'label' => 'Header',
+    ],
+    'evening_text_before' => [
+      'type' => 'text',
+      'label' => 'Before',
+    ],
+    'evening_text_block_header' => [
+      'type' => 'text',
+      'label' => 'Block Header',
+    ],
+    'evening_text_after' => [
+      'type' => 'text',
+      'label' => 'After',
+    ],
+  ],
+  'Prompts' => [
+    'news_prompt' => [
+      'type' => 'textarea',
+      'label' => 'News Prompt',
+    ],
+    'news_header_prompt' => [
+      'type' => 'textarea',
+      'label' => 'News Header Prompt',
+    ],
+    'morning_prompt' => [
+      'type' => 'textarea',
+      'label' => 'Morning Prompt',
+    ],
+    'weather_prompt' => [
+      'type' => 'textarea',
+      'label' => 'Weather Prompt',
+    ],
+    'evening_prompt' => [
+      'type' => 'textarea',
+      'label' => 'Evening Prompt',
+    ],
+  ]
+];
 
 class VeterNRWPlugin
 {
-  const FIELDS = [
-    'API Keys' => [
-      'api_chat_gpt' => [
-        'type' => 'text',
-        'label' => 'API ChatGPT',
-      ],
-      'api_claude' => [
-        'type' => 'text',
-        'label' => 'API Claude',
-      ]
-    ],
-    'Model' => [
-      'default_model' => [
-        'type' => 'select',
-        'label' => 'Default Model',
-        'options' => [
-          'ChatGPT',
-          'Claude',
-        ],
-      ],
-      'tones' => [
-        'type' => 'text',
-        'label' => 'Tones',
-      ],
-    ],
-    'Morning Text' => [
-      'morning_text_header' => [
-        'type' => 'text',
-        'label' => 'Header',
-      ],
-      'morning_text_before' => [
-        'type' => 'text',
-        'label' => 'Before',
-      ],
-      'morning_text_block_header' => [
-        'type' => 'text',
-        'label' => 'Block Header',
-      ],
-      'morning_text_after' => [
-        'type' => 'text',
-        'label' => 'After',
-      ]
-    ],
-    'Evening Text' => [
-      'evening_text_header' => [
-        'type' => 'text',
-        'label' => 'Header',
-      ],
-      'evening_text_before' => [
-        'type' => 'text',
-        'label' => 'Before',
-      ],
-      'evening_text_block_header' => [
-        'type' => 'text',
-        'label' => 'Block Header',
-      ],
-      'evening_text_after' => [
-        'type' => 'text',
-        'label' => 'After',
-      ],
-    ],
-    'Prompts' => [
-      'news_prompt' => [
-        'type' => 'textarea',
-        'label' => 'News Prompt',
-      ],
-      'news_header_prompt' => [
-        'type' => 'textarea',
-        'label' => 'News Header Prompt',
-      ],
-      'morning_prompt' => [
-        'type' => 'textarea',
-        'label' => 'Morning Prompt',
-      ],
-      'weather_prompt' => [
-        'type' => 'textarea',
-        'label' => 'Weather Prompt',
-      ],
-      'evening_prompt' => [
-        'type' => 'textarea',
-        'label' => 'Evening Prompt',
-      ],
-    ]
-  ];
 
   protected Environment $twig;
 
@@ -221,7 +221,7 @@ class VeterNRWPlugin
 
   public function addPluginSettings()
   {
-    foreach (self::FIELDS as $section => $fields) {
+    foreach (FIELDS as $section => $fields) {
       $renderer = function () use ($section) {
         echo "<p>Settings for {$section}</p>";
       };
@@ -260,7 +260,7 @@ class VeterNRWPlugin
   {
     $settings = [];
 
-    foreach (self::FIELDS as $_ => $fields) {
+    foreach (FIELDS as $_ => $fields) {
       foreach ($fields as $key => $field) {
         $settings[$key] = get_option($key, $field['value']);
       }

@@ -1,5 +1,3 @@
 {% for item in news %}
-<!-- wp:paragraph -->
-<p>{{ item }}</p>
-<!-- /wp:paragraph -->
+{{ item | raw }}
 {% endfor %}

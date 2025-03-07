@@ -8,7 +8,7 @@ import AutoAwesome from '@mui/icons-material/AutoAwesome';
 import ReplayIcon from '@mui/icons-material/Replay';
 
 import { Alert, Box, IconButton, TextField } from '@mui/material';
-import { FC, useCallback, useState } from 'react';
+import { FC, useCallback, useEffect, useState } from 'react';
 import { getChatGPTResponse, getClaudeResponse } from '../service';
 import { useSettings } from '../SettingsContext';
 
@@ -80,8 +80,19 @@ export const GeneratedResponse: FC<GeneratedResponseProps> = ({
     [onReady, cachedTexts],
   );
 
+  useEffect(() => {
+    if (cachedTexts.length || !prompt) return;
+    handleGenerate();
+  }, [cachedTexts, currentIndex, prompt, handleGenerate]);
+
   return (
-    <Box display="flex" gap={2} component="div" alignItems="flex-start">
+    <Box
+      display="flex"
+      gap={2}
+      component="div"
+      alignItems="flex-start"
+      flexDirection={{ xs: 'column', sm: 'row' }}
+    >
       <IconButton
         onClick={handleGenerate}
         loading={isLoading}
@@ -95,6 +106,7 @@ export const GeneratedResponse: FC<GeneratedResponseProps> = ({
         flexDirection="column"
         gap={2}
         overflow="hidden"
+        width="100%"
       >
         {cachedTexts[currentIndex] && (
           <Box
@@ -112,7 +124,7 @@ export const GeneratedResponse: FC<GeneratedResponseProps> = ({
             value={prompt}
             onChange={(event) => onChange?.(event.target.value)}
             variant="standard"
-            disabled={!isReady}
+            disabled={!isReady || isLoading}
             slotProps={{
               input: {
                 disableUnderline: true,
