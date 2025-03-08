@@ -228,16 +228,13 @@ class VeterNRWPlugin
 
   public function renderField($field, $key)
   {
-    try {
-      $value = get_option($key, $field['value']);
-      echo $this->twig->render('field.twig', [
-        'field' => $field,
-        'value' => $value,
-        'key' => $key,
-      ]);
-    } catch (\Exception $e) {
-      echo $e->getMessage();
-    }
+    $value = get_option($key, $field['value']);
+
+    echo $this->twig->render('field.twig', [
+      'field' => $field,
+      'value' => $value,
+      'key' => $key,
+    ]);
   }
 
   public function registerApiRoutes()
@@ -276,12 +273,12 @@ class VeterNRWPlugin
 
   public function createNewsDraft($request)
   {
-    $paragraphs = $this->formatPost($request['content']);
+    $paragraphs = explode("\n", $request['content']);
 
     return rest_ensure_response(wp_insert_post([
       'post_type' => 'post',
       'post_title' => sanitize_text_field($paragraphs[0]),
-      'post_content' => $request['content'],
+      'post_content' => implode("\n", array_slice($paragraphs, 1)),
       'post_status' => 'draft',
     ]));
   }
@@ -309,11 +306,6 @@ class VeterNRWPlugin
       'post_content' => $blocks,
       'post_status' => 'draft',
     ]));
-  }
-
-  private function formatPost($post)
-  {
-    return explode("\n", $post);
   }
 
   private function getOutput()

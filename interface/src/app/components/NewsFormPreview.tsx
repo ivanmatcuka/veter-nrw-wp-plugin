@@ -83,7 +83,7 @@ export const NewsFormPreview: FC<NewsFormPreviewProps> = ({
         <Button
           href={postDraftLink}
           target="_blank"
-          variant="contained"
+          variant="outlined"
           disabled={!generatedNewsText}
         >
           {t('openDraft')}
