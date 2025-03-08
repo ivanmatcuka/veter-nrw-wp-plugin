@@ -13,5 +13,10 @@
     "exclude-from-classmap": [
       "johnpbloch/wordpress"
     ]
+  },
+  "scripts": {
+    "build": "./build.sh",
+    "start": "docker compose up -d",
+    "stop": "docker compose down"
   }
 }
