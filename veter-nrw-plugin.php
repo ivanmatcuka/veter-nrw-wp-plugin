@@ -22,100 +22,7 @@ use buzzingpixel\twigswitch\SwitchTwigExtension;
 defined('ABSPATH') or die();
 
 require(__DIR__ . '/vendor/autoload.php');
-
-const OPTIONS_PAGE_TITLE = 'Veter NRW Plugin Settings';
-const OPTIONS_MENU_TITLE = 'Veter NRW Plugin Settings';
-const OPTIONS_MENU_SLUG = 'veter-options';
-const PAGE_TITLE = 'Veter NRW';
-const MENU_TITLE = 'Veter NRW';
-const MENU_SLUG = 'veter';
-
-const PLUGIN_SETTINGS = 'veter-plugin-settings';
-
-const FIELDS = [
-  'API Keys' => [
-    'api_chat_gpt' => [
-      'type' => 'text',
-      'label' => 'API ChatGPT',
-    ],
-    'api_claude' => [
-      'type' => 'text',
-      'label' => 'API Claude',
-    ]
-  ],
-  'Model' => [
-    'default_model' => [
-      'type' => 'select',
-      'label' => 'Default Model',
-      'options' => [
-        'ChatGPT',
-        'Claude',
-      ],
-    ],
-    'tones' => [
-      'type' => 'text',
-      'label' => 'Tones',
-    ],
-  ],
-  'Morning Text' => [
-    'morning_text_header' => [
-      'type' => 'text',
-      'label' => 'Header',
-    ],
-    'morning_text_before' => [
-      'type' => 'text',
-      'label' => 'Before',
-    ],
-    'morning_text_block_header' => [
-      'type' => 'text',
-      'label' => 'Block Header',
-    ],
-    'morning_text_after' => [
-      'type' => 'text',
-      'label' => 'After',
-    ]
-  ],
-  'Evening Text' => [
-    'evening_text_header' => [
-      'type' => 'text',
-      'label' => 'Header',
-    ],
-    'evening_text_before' => [
-      'type' => 'text',
-      'label' => 'Before',
-    ],
-    'evening_text_block_header' => [
-      'type' => 'text',
-      'label' => 'Block Header',
-    ],
-    'evening_text_after' => [
-      'type' => 'text',
-      'label' => 'After',
-    ],
-  ],
-  'Prompts' => [
-    'news_prompt' => [
-      'type' => 'textarea',
-      'label' => 'News Prompt',
-    ],
-    'news_header_prompt' => [
-      'type' => 'textarea',
-      'label' => 'News Header Prompt',
-    ],
-    'morning_prompt' => [
-      'type' => 'textarea',
-      'label' => 'Morning Prompt',
-    ],
-    'weather_prompt' => [
-      'type' => 'textarea',
-      'label' => 'Weather Prompt',
-    ],
-    'evening_prompt' => [
-      'type' => 'textarea',
-      'label' => 'Evening Prompt',
-    ],
-  ]
-];
+include_once(__DIR__ . 'include.php');
 
 class VeterNRWPlugin
 {
@@ -173,13 +80,13 @@ class VeterNRWPlugin
   public function renderMenuPage()
   {
     wp_enqueue_script_module(
-      'veter-nrw-script',
-      plugins_url('interface/dist/assets/index.js', __FILE__),
+      SCRIPT_NAME,
+      plugins_url(SCRIPT_URL, __FILE__),
     );
 
     wp_enqueue_style(
-      'veter-nrw-style',
-      plugins_url('interface/dist/assets/index.css', __FILE__),
+      STYLE_NAME,
+      plugins_url(STYLE_URL, __FILE__),
     );
 
     echo $this->twig->render('index.twig');
@@ -196,7 +103,7 @@ class VeterNRWPlugin
         $section,
         $section,
         $renderer,
-        PLUGIN_SETTINGS
+        PLUGIN_SETTINGS_SLUG
       );
 
       $this->addFields($fields, $section);
@@ -206,7 +113,7 @@ class VeterNRWPlugin
   public function addFields($fields, $section)
   {
     foreach ($fields as $key => $field) {
-      register_setting(PLUGIN_SETTINGS, $key);
+      register_setting(PLUGIN_SETTINGS_SLUG, $key);
       $this->addField($field, $key, $section);
     }
   }
@@ -221,7 +128,7 @@ class VeterNRWPlugin
       $key,
       $field['label'],
       $renderer,
-      PLUGIN_SETTINGS,
+      PLUGIN_SETTINGS_SLUG,
       $section,
     );
   }
@@ -312,8 +219,8 @@ class VeterNRWPlugin
   {
     // TODO: refactor
     ob_start();
-    settings_fields(PLUGIN_SETTINGS);
-    do_settings_sections(PLUGIN_SETTINGS);
+    settings_fields(PLUGIN_SETTINGS_SLUG);
+    do_settings_sections(PLUGIN_SETTINGS_SLUG);
     submit_button();
     $output = ob_get_contents();
     ob_end_clean();
