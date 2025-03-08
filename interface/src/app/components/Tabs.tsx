@@ -46,11 +46,7 @@ export default function BasicTabs() {
   return (
     <Box maxWidth="md">
       <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
-        <Tabs
-          value={value}
-          onChange={handleChange}
-          aria-label="basic tabs example"
-        >
+        <Tabs value={value} onChange={handleChange}>
           <Tab label={t('news')} {...a11yProps(0)} />
           <Tab label={t('morning')} {...a11yProps(1)} />
           <Tab label={t('evening')} {...a11yProps(2)} />

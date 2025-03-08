@@ -1,15 +1,14 @@
 import { Box, Button, Chip, TextField } from '@mui/material';
 import { FC } from 'react';
-
 import { useTranslation } from 'react-i18next';
 
-export type News = Partial<{
+export type News = {
   text: string;
   url: string;
   extra: string;
   result?: string;
   prompt?: string;
-}>[];
+}[];
 
 type EventNewsProps = {
   news: News;

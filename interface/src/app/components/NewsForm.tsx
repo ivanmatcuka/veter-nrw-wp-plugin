@@ -9,8 +9,8 @@ import {
 } from '@mui/material';
 import { useEffect, useState } from 'react';
 
-import { Page } from '@/components/Page';
-import { Section } from '@/components/Section';
+import { Page } from '@/app/components/Page';
+import { Section } from '@/app/components/Section';
 
 import { NewsFormPreview } from './NewsFormPreview';
 

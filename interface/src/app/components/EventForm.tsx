@@ -1,13 +1,15 @@
-import { Page } from '@/components/Page';
+import { Page } from '@/app/components/Page';
 import { Button, FormControlLabel, Radio, TextField } from '@mui/material';
 import { FC, useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-
-import { Section } from '@/components/Section';
 import stringInject from 'stringinject';
-import { AI_MODELS, useSettings } from '../SettingsContext';
+
+import { Section } from '@/app/components/Section';
+
 import { EventNews, News } from './EventNews';
 import { PostPreview } from './PostPreview';
+
+import { AI_MODELS, useSettings } from '../SettingsContext';
 
 type DaytimeSettings = {
   textHeader: string;
@@ -100,6 +102,10 @@ export const EventForm: FC<EventFormProps> = ({ daytime }) => {
       textAfter: settings[`${daytime}_text_after`] || '',
     });
   }, [settings, daytime]);
+
+  useEffect(() => {
+    if (settings?.default_model) setSelectedModel(settings.default_model);
+  }, [settings?.default_model]);
 
   return (
     <Page

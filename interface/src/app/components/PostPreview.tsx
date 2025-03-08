@@ -52,7 +52,6 @@ export const PostPreview: FC<PropsWithChildren<PostPreviewProps>> = ({
     formData.append('textAfter', textAfter);
 
     setPostDraftId(await createDaytimeDraft(formData));
-
     setIsLoading(false);
   }, [
     textHeader,

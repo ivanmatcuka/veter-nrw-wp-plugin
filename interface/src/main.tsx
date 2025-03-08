@@ -1,9 +1,9 @@
+import { SettingsProvider } from '@/app/SettingsContext';
 import { ThemeProvider } from '@mui/material/styles';
 import domReady from '@wordpress/dom-ready';
 import React from 'react';
 import { createRoot } from 'react-dom/client';
 import App from './App';
-import { SettingsProvider } from './app/SettingsContext';
 import './i18n';
 import './index.css';
 import theme from './theme';

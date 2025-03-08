@@ -9,7 +9,9 @@ import ReplayIcon from '@mui/icons-material/Replay';
 
 import { Alert, Box, IconButton, TextField } from '@mui/material';
 import { FC, useCallback, useEffect, useState } from 'react';
-import { getChatGPTResponse, getClaudeResponse } from '../service';
+
+import { getChatGPTResponse, getClaudeResponse } from '@/app/service';
+
 import { useSettings } from '../SettingsContext';
 
 type GeneratedResponseProps = {

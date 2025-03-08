@@ -13,19 +13,17 @@ export const ToneSelector: FC<ToneSelectorProps> = ({
   onChange,
 }) => (
   <Box display="flex" gap={1} flexWrap="wrap">
-    {parseTones(tones).map((tone, index) => {
-      return (
-        <FormControlLabel
-          key={index}
-          control={
-            <Radio
-              checked={selectedTone === tone}
-              onChange={() => onChange(tone)}
-            />
-          }
-          label={tone}
-        />
-      );
-    })}
+    {parseTones(tones).map((tone, index) => (
+      <FormControlLabel
+        key={index}
+        control={
+          <Radio
+            checked={selectedTone === tone}
+            onChange={() => onChange(tone)}
+          />
+        }
+        label={tone}
+      />
+    ))}
   </Box>
 );

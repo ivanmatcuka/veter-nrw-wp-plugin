@@ -23,7 +23,15 @@ defined('ABSPATH') or die();
 
 require(__DIR__ . '/vendor/autoload.php');
 
+const OPTIONS_PAGE_TITLE = 'Veter NRW Plugin Settings';
+const OPTIONS_MENU_TITLE = 'Veter NRW Plugin Settings';
+const OPTIONS_MENU_SLUG = 'veter-options';
+const PAGE_TITLE = 'Veter NRW';
+const MENU_TITLE = 'Veter NRW';
+const MENU_SLUG = 'veter';
+
 const PLUGIN_SETTINGS = 'veter-plugin-settings';
+
 const FIELDS = [
   'API Keys' => [
     'api_chat_gpt' => [
@@ -126,53 +134,49 @@ class VeterNRWPlugin
   {
     add_action('rest_api_init', [$this, 'registerApiRoutes']);
     add_action('admin_menu', [$this, 'addPluginOptionsPage']);
-    add_action('admin_init', [$this, 'addPluginSettings']);
+    add_action('admin_init', [$this, 'registerPluginOptions']);
   }
-
-
 
   public function addPluginOptionsPage()
   {
     add_options_page(
-      'Veter NRW Plugin Settings',
-      'Veter NRW Plugin Settings',
+      OPTIONS_PAGE_TITLE,
+      OPTIONS_MENU_TITLE,
       'manage_options',
-      'veter',
-      [$this, 'renderAdminPage'],
+      OPTIONS_MENU_SLUG,
+      [$this, 'renderOptionsPage'],
     );
 
-    $this->addExtraMenuPage();
+    $this->addMenuPage();
   }
 
-  public function renderAdminPage()
+  public function renderOptionsPage()
   {
-    $output = file_get_contents(__DIR__ . '/dist/index.html');
-
-    echo $output;
-    echo $this->twig->render('settings.twig', [
+    echo $this->twig->render('options.twig', [
       'output' => $this->getOutput()
     ]);
   }
 
-  public function addExtraMenuPage()
+  public function addMenuPage()
   {
     add_menu_page(
-      'Veter NRW',
-      'Veter NRW',
+      PAGE_TITLE,
+      MENU_TITLE,
       'manage_options',
-      'veter-nrw',
-      [$this, 'renderExtraSettingsPage'],
+      MENU_SLUG,
+      [$this, 'renderMenuPage'],
       'dashicons-welcome-widgets-menus',
       80
     );
   }
 
-  public function renderExtraSettingsPage()
+  public function renderMenuPage()
   {
     wp_enqueue_script_module(
       'veter-nrw-script',
       plugins_url('interface/dist/assets/index.js', __FILE__),
     );
+
     wp_enqueue_style(
       'veter-nrw-style',
       plugins_url('interface/dist/assets/index.css', __FILE__),
@@ -181,45 +185,7 @@ class VeterNRWPlugin
     echo $this->twig->render('index.twig');
   }
 
-  public function renderRield($field, $key)
-  {
-    try {
-      $value = get_option($key, $field['value']);
-      echo $this->twig->render('field.twig', [
-        'field' => $field,
-        'value' => $value,
-        'key' => $key,
-      ]);
-    } catch (\Exception $e) {
-      echo $e->getMessage();
-    }
-  }
-
-  public function addField($field, $key, $section)
-  {
-    $renderer = function () use ($field, $key) {
-      $this->renderRield($field, $key);
-    };
-
-    add_settings_field(
-      $key,
-      $field['label'],
-      $renderer,
-      PLUGIN_SETTINGS,
-      $section,
-    );
-  }
-
-  public function addFields($fields, $section)
-  {
-    foreach ($fields as $key => $field) {
-      register_setting(PLUGIN_SETTINGS, $key);
-      $this->addField($field, $key, $section);
-    }
-  }
-
-
-  public function addPluginSettings()
+  public function registerPluginOptions()
   {
     foreach (FIELDS as $section => $fields) {
       $renderer = function () use ($section) {
@@ -237,6 +203,43 @@ class VeterNRWPlugin
     }
   }
 
+  public function addFields($fields, $section)
+  {
+    foreach ($fields as $key => $field) {
+      register_setting(PLUGIN_SETTINGS, $key);
+      $this->addField($field, $key, $section);
+    }
+  }
+
+  public function addField($field, $key, $section)
+  {
+    $renderer = function () use ($field, $key) {
+      $this->renderField($field, $key);
+    };
+
+    add_settings_field(
+      $key,
+      $field['label'],
+      $renderer,
+      PLUGIN_SETTINGS,
+      $section,
+    );
+  }
+
+  public function renderField($field, $key)
+  {
+    try {
+      $value = get_option($key, $field['value']);
+      echo $this->twig->render('field.twig', [
+        'field' => $field,
+        'value' => $value,
+        'key' => $key,
+      ]);
+    } catch (\Exception $e) {
+      echo $e->getMessage();
+    }
+  }
+
   public function registerApiRoutes()
   {
     register_rest_route('veter-nrw-plugin/v1', '/settings', [
@@ -244,11 +247,13 @@ class VeterNRWPlugin
       'callback' => [$this, 'getSettings'],
       'permission_callback' => '__return_true'
     ]);
+
     register_rest_route('veter-nrw-plugin/v1', '/create-news-draft', [
       'methods' => 'POST',
       'callback' => [$this, 'createNewsDraft'],
       'permission_callback' => '__return_true'
     ]);
+
     register_rest_route('veter-nrw-plugin/v1', '/create-daytime-draft', [
       'methods' => 'POST',
       'callback' => [$this, 'createDaytimeDraft'],

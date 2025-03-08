@@ -44,6 +44,8 @@ export const NewsFormPreview: FC<NewsFormPreviewProps> = ({
     setIsLoading(false);
   }, [generatedNewsText]);
 
+  const postDraftLink = `/wp-admin/post.php?post=${postDraftId}&action=edit`;
+
   useEffect(() => {
     setNewsRenderedPrompt(
       stringInject(newsPrompt, {
@@ -79,7 +81,7 @@ export const NewsFormPreview: FC<NewsFormPreviewProps> = ({
       )}
       {postDraftId && (
         <Button
-          href={`/wp-admin/post.php?post=${postDraftId}&action=edit`}
+          href={postDraftLink}
           target="_blank"
           variant="contained"
           disabled={!generatedNewsText}

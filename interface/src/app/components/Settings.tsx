@@ -1,9 +1,9 @@
 import { Box, MenuItem, Select, TextField, Typography } from '@mui/material';
 import { FC } from 'react';
-
-import { Page } from '@/components/Page';
-
 import { useTranslation } from 'react-i18next';
+
+import { Page } from '@/app/components/Page';
+
 import { AI_MODELS, useSettings } from '../SettingsContext';
 
 type SettingsFieldProps = { name: string; label: string; value?: string };
@@ -20,6 +20,7 @@ const SettingsField: FC<SettingsFieldProps> = ({ name, label, value = '' }) => (
 
 export const Settings = () => {
   const { settings } = useSettings();
+
   const { t } = useTranslation('settings');
 
   return (

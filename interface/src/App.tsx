@@ -1,7 +1,7 @@
-import BasicTabs from './app/components/Tabs';
+import PluginTabs from '@/app/components/Tabs';
 
 function App() {
-  return <BasicTabs />;
+  return <PluginTabs />;
 }
 
 export default App;
