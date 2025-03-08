@@ -22,7 +22,7 @@ use buzzingpixel\twigswitch\SwitchTwigExtension;
 defined('ABSPATH') or die();
 
 require(__DIR__ . '/vendor/autoload.php');
-include_once(__DIR__ . 'include.php');
+require(__DIR__ . '/include.php');
 
 class VeterNRWPlugin
 {
