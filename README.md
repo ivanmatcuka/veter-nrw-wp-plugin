@@ -1,4 +1,4 @@
-# Veter NRW WordPress plugin
+# BETER WordPress plugin
 
 This repository contains the code for Veter NRW WordPress plugin. The root directory contains the back-end code, `interface` has a React project with front end.
 

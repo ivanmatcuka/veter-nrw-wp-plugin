@@ -9,7 +9,7 @@ export const translations = {
       postDraft: 'Post Draft',
       openDraft: 'Open Draft',
       settingsError:
-        'Make sure to fill out all the fields in Settings -> Veter NRW Plugin Settings',
+        'Make sure to fill out all the fields in Settings -> BETER Plugin Settings',
     },
     settings: {
       title: 'Settings',
