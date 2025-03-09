@@ -8,16 +8,16 @@ import {
   TextField,
 } from '@mui/material';
 import { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
 import { Page } from '@/app/components/Page';
 import { Section } from '@/app/components/Section';
+import { parseTones } from '@/utils/helpers';
 
 import { NewsFormPreview } from './NewsFormPreview';
-
-import { parseTones } from '@/utils/helpers';
-import { useTranslation } from 'react-i18next';
-import { AI_MODELS, useSettings } from '../SettingsContext';
 import { ToneSelector } from './ToneSelector';
+
+import { AI_MODELS, useSettings } from '../SettingsContext';
 
 const PARAGRAPH_OPTIONS = [1, 2, 3, 4, 5];
 
@@ -37,8 +37,6 @@ export const NewsForm = () => {
   const { t } = useTranslation(['newsForm', 'common']);
 
   const { settings } = useSettings();
-
-  const isReady = Boolean(newsText && paragraphCount && selectedTone);
 
   useEffect(() => {
     if (settings?.news_prompt) setPrompt(settings.news_prompt);
@@ -99,7 +97,7 @@ export const NewsForm = () => {
             <ToneSelector
               tones={settings.tones}
               selectedTone={selectedTone}
-              onChange={(selectedTone) => setSelectedTone(selectedTone)}
+              onChange={setSelectedTone}
             />
           </Box>
         </Section>
@@ -134,7 +132,12 @@ export const NewsForm = () => {
       </Section>
 
       <Section>
-        {isSubmitted ? (
+        <Box display="flex" flexDirection="column" gap={4}>
+          {!isSubmitted && (
+            <Button type="submit" variant="contained">
+              {t('generate')}
+            </Button>
+          )}
           <NewsFormPreview
             selectedModel={selectedModel}
             newsPrompt={prompt}
@@ -143,13 +146,9 @@ export const NewsForm = () => {
             additionalInstructions={additionalInstructions}
             newsText={newsText}
             newsUrl={newsUrl}
-            isReady={isReady}
+            isReady={isSubmitted}
           />
-        ) : (
-          <Button type="submit" variant="contained">
-            {t('generate')}
-          </Button>
-        )}
+        </Box>
       </Section>
     </Page>
   );

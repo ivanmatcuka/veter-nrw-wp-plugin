@@ -1,5 +1,5 @@
 #!/bin/bash
-# Script to package the Veter NRW WordPress plugin
+# Script to package the BETEP NRW WordPress plugin
 
 # Define plugin name and zip file
 PLUGIN_NAME="veter-nrw-plugin"
@@ -21,6 +21,7 @@ cd ..
 # Create the zip package
 zip -r "$ZIP_FILE" \
   "$PLUGIN_NAME.php" \
+  include.php \
   templates/ \
   vendor/ \
   interface/dist/ \

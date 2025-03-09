@@ -1,5 +1,5 @@
 import { Page } from '@/app/components/Page';
-import { Button, FormControlLabel, Radio, TextField } from '@mui/material';
+import { Box, Button, FormControlLabel, Radio, TextField } from '@mui/material';
 import { FC, useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import stringInject from 'stringinject';
@@ -214,20 +214,22 @@ export const EventForm: FC<EventFormProps> = ({ daytime }) => {
       </Section>
 
       <Section>
-        {isSubmitted ? (
+        <Box display="flex" flexDirection="column" gap={4}>
+          {!isSubmitted && (
+            <Button type="submit" variant="contained">
+              {t('generate')}
+            </Button>
+          )}
           <PostPreview
             {...daytimeSettings}
+            isReady={isSubmitted}
             weatherText={weatherText}
             daytime={daytime}
             news={news ?? []}
             updateNews={handleUpdateNewsItem}
             selectedModel={selectedModel || ''}
           />
-        ) : (
-          <Button type="submit" variant="contained">
-            {t('generate')}
-          </Button>
-        )}
+        </Box>
       </Section>
     </Page>
   );

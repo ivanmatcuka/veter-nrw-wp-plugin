@@ -83,9 +83,9 @@ export const GeneratedResponse: FC<GeneratedResponseProps> = ({
   );
 
   useEffect(() => {
-    if (cachedTexts.length || !prompt) return;
+    if (cachedTexts.length || !prompt || !isReady) return;
     handleGenerate();
-  }, [cachedTexts, currentIndex, prompt, handleGenerate]);
+  }, [cachedTexts, currentIndex, prompt, isReady, handleGenerate]);
 
   return (
     <Box
@@ -116,17 +116,14 @@ export const GeneratedResponse: FC<GeneratedResponseProps> = ({
             component="div"
           />
         )}
-        <Alert
-          color={error || !isReady ? 'error' : 'info'}
-          icon={<AutoAwesome />}
-        >
+        <Alert color={error ? 'error' : 'info'} icon={<AutoAwesome />}>
           <TextField
             fullWidth
             multiline
             value={prompt}
             onChange={(event) => onChange?.(event.target.value)}
             variant="standard"
-            disabled={!isReady || isLoading}
+            disabled={isLoading}
             slotProps={{
               input: {
                 disableUnderline: true,

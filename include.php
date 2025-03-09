@@ -1,10 +1,10 @@
 <?php
 
-const OPTIONS_PAGE_TITLE = 'Veter NRW Plugin Settings';
-const OPTIONS_MENU_TITLE = 'Veter NRW Plugin Settings';
+const OPTIONS_PAGE_TITLE = 'BETEP Plugin Settings';
+const OPTIONS_MENU_TITLE = 'BETEP Plugin Settings';
 const OPTIONS_MENU_SLUG = 'veter-options';
-const PAGE_TITLE = 'Veter NRW';
-const MENU_TITLE = 'Veter NRW';
+const PAGE_TITLE = 'BETEP';
+const MENU_TITLE = 'BETEP';
 const MENU_SLUG = 'veter';
 const PLUGIN_SETTINGS_SLUG = 'veter-plugin-settings';
 const SCRIPT_NAME = 'veter-nrw-script';

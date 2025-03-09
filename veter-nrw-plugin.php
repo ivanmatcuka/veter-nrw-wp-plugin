@@ -1,13 +1,13 @@
 <?php
 
 /**
- * @package NRW
+ * @package BETEP
  * @version 1.0.0
  */
 /*
-Plugin Name: Veter NRW Plugin
+Plugin Name: BETEP Plugin
 Plugin URI: http://wordpress.org/plugins/veter-nrw/
-Description: This plugin is meant to generate news for Veter NRW.
+Description: This plugin is meant to generate news for BETEP.
 Author: Ivan Matcuka
 Version: 1.0.0
 Author URI: https://github.com/ivanmatcuka

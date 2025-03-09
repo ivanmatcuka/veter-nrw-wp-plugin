@@ -16,6 +16,7 @@ type PostPreviewProps = {
   textAfter: string;
   selectedModel: string;
   weatherText?: string;
+  isReady: boolean;
   news: News;
   updateNews: (index: number, field: keyof News[0], value: string) => void;
 };
@@ -27,6 +28,7 @@ export const PostPreview: FC<PropsWithChildren<PostPreviewProps>> = ({
   textBlockHeader,
   selectedModel,
   weatherText,
+  isReady,
   news,
   updateNews,
 }) => {
@@ -91,7 +93,7 @@ export const PostPreview: FC<PropsWithChildren<PostPreviewProps>> = ({
           key={index}
           model={selectedModel}
           prompt={item.prompt || ''}
-          isReady={Boolean(item.text && item.url)}
+          isReady={isReady}
           onReady={(text) => updateNews(index, 'result', text)}
           onChange={(text) => updateNews(index, 'prompt', text)}
         />
