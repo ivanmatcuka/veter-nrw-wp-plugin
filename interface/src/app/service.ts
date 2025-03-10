@@ -1,8 +1,11 @@
+declare const wp_ajax_obj: {
+  nonce: string;
+  ajax_url: string;
+};
+
 import Anthropic from '@anthropic-ai/sdk';
 import { TextBlock } from '@anthropic-ai/sdk/resources/index.mjs';
 import { ChatGPTAPI, ChatGPTError, ChatMessage } from 'chatgpt';
-
-const API_URL = import.meta.env.VITE_WORDPRESS_URL;
 
 export type SettingsResponse = {
   id: number;
@@ -31,16 +34,16 @@ export type SettingsResponse = {
 };
 
 export const getSettings = async (): Promise<SettingsResponse | null> => {
+  const formData = new FormData();
+  formData.append('action', 'get_settings');
+  formData.append('_ajax_nonce', wp_ajax_obj.nonce);
+
   try {
-    const response = await fetch(
-      `${API_URL}/wp-json/veter-nrw-plugin/v1/settings`,
-      {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      },
-    );
+    const response = await fetch(wp_ajax_obj.ajax_url, {
+      method: 'POST',
+      credentials: 'same-origin',
+      body: formData,
+    });
 
     if (!response.ok) {
       throw new Error('Failed to get tones');
@@ -55,17 +58,15 @@ export const getSettings = async (): Promise<SettingsResponse | null> => {
 export const createNewsDraft = async (
   formData: FormData,
 ): Promise<number | null> => {
+  formData.append('action', 'create_news_draft');
+  formData.append('_ajax_nonce', wp_ajax_obj.nonce);
+
   try {
-    const response = await fetch(
-      `${API_URL}/wp-json/veter-nrw-plugin/v1/create-news-draft`,
-      {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(Object.fromEntries(formData)),
-      },
-    );
+    const response = await fetch(wp_ajax_obj.ajax_url, {
+      method: 'POST',
+      credentials: 'same-origin',
+      body: formData,
+    });
 
     if (!response.ok) {
       throw new Error('Failed to get tones');
@@ -80,17 +81,15 @@ export const createNewsDraft = async (
 export const createDaytimeDraft = async (
   formData: FormData,
 ): Promise<number | null> => {
+  formData.append('action', 'create_daytime_draft');
+  formData.append('_ajax_nonce', wp_ajax_obj.nonce);
+
   try {
-    const response = await fetch(
-      `${API_URL}/wp-json/veter-nrw-plugin/v1/create-daytime-draft`,
-      {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(Object.fromEntries(formData)),
-      },
-    );
+    const response = await fetch(wp_ajax_obj.ajax_url, {
+      method: 'POST',
+      credentials: 'same-origin',
+      body: formData,
+    });
 
     if (!response.ok) {
       throw new Error('Failed to get tones');

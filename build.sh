@@ -14,14 +14,13 @@ composer install --no-dev
 # Build the React frontend assets
 cd interface
 npm install
-source .env.production
 npm run build
 cd ..
 
 # Create the zip package
 zip -r "$ZIP_FILE" \
   "$PLUGIN_NAME.php" \
-  include.php \
+  veter-nrw-plugin-constants.php \
   templates/ \
   vendor/ \
   interface/dist/ \

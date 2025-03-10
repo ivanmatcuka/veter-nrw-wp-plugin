@@ -8,7 +8,7 @@ import './i18n';
 import './index.css';
 import theme from './theme';
 
-const root = createRoot(document.getElementById('root') as HTMLElement);
+const root = createRoot(document.getElementById('react-root') as HTMLElement);
 
 domReady(() => {
   root.render(

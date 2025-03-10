@@ -22,7 +22,7 @@ use buzzingpixel\twigswitch\SwitchTwigExtension;
 defined('ABSPATH') or die();
 
 require(__DIR__ . '/vendor/autoload.php');
-require(__DIR__ . '/include.php');
+require(__DIR__ . '/veter-nrw-plugin-constants.php');
 
 class VeterNRWPlugin
 {
@@ -39,9 +39,36 @@ class VeterNRWPlugin
 
   public function load()
   {
-    add_action('rest_api_init', [$this, 'registerApiRoutes']);
     add_action('admin_menu', [$this, 'addPluginOptionsPage']);
     add_action('admin_init', [$this, 'registerPluginOptions']);
+
+    add_action('wp_ajax_get_settings', [$this, 'getSettings']);
+    add_action('wp_ajax_create_news_draft', [$this, 'createNewsDraft']);
+    add_action('wp_ajax_create_daytime_draft', [$this, 'createDaytimeDraft']);
+  }
+
+  public function enqueueScripts()
+  {
+    $src = plugins_url(SCRIPT_URL, __FILE__);
+
+    wp_register_script(SCRIPT_NAME, $src);
+    wp_localize_script(
+      SCRIPT_NAME,
+      AJAX_OBJECT_NAME,
+      array(
+        'ajax_url' => admin_url('admin-ajax.php'),
+        'nonce'    => wp_create_nonce(AJAX_NONCE_NAME),
+      )
+    );
+    wp_enqueue_script(SCRIPT_NAME, $src, NULL, NULL, array(
+      'in_footer' => true,
+      'strategy'  => 'defer',
+    ));
+
+    wp_enqueue_style(
+      STYLE_NAME,
+      plugins_url(STYLE_URL, __FILE__),
+    );
   }
 
   public function addPluginOptionsPage()
@@ -64,9 +91,14 @@ class VeterNRWPlugin
     ]);
   }
 
+  /**
+   * Registers the menu page where the main plugin interface lives.
+   * Then registered a dynamic hook that only loads the assets on
+   * that page.
+   */
   public function addMenuPage()
   {
-    add_menu_page(
+    $suffix = add_menu_page(
       PAGE_TITLE,
       MENU_TITLE,
       'manage_options',
@@ -75,20 +107,12 @@ class VeterNRWPlugin
       'dashicons-welcome-widgets-menus',
       80
     );
+
+    add_action('admin_print_scripts-' . $suffix, [$this, 'enqueueScripts']);
   }
 
   public function renderMenuPage()
   {
-    wp_enqueue_script_module(
-      SCRIPT_NAME,
-      plugins_url(SCRIPT_URL, __FILE__),
-    );
-
-    wp_enqueue_style(
-      STYLE_NAME,
-      plugins_url(STYLE_URL, __FILE__),
-    );
-
     echo $this->twig->render('index.twig');
   }
 
@@ -144,45 +168,28 @@ class VeterNRWPlugin
     ]);
   }
 
-  public function registerApiRoutes()
-  {
-    register_rest_route('veter-nrw-plugin/v1', '/settings', [
-      'methods' => 'GET',
-      'callback' => [$this, 'getSettings'],
-      'permission_callback' => '__return_true'
-    ]);
-
-    register_rest_route('veter-nrw-plugin/v1', '/create-news-draft', [
-      'methods' => 'POST',
-      'callback' => [$this, 'createNewsDraft'],
-      'permission_callback' => '__return_true'
-    ]);
-
-    register_rest_route('veter-nrw-plugin/v1', '/create-daytime-draft', [
-      'methods' => 'POST',
-      'callback' => [$this, 'createDaytimeDraft'],
-      'permission_callback' => '__return_true'
-    ]);
-  }
-
   public function getSettings()
   {
+    check_ajax_referer(AJAX_NONCE_NAME);
+
     $settings = [];
 
     foreach (FIELDS as $_ => $fields) {
-      foreach ($fields as $key => $field) {
-        $settings[$key] = get_option($key, $field['value']);
+      foreach ($fields as $key => $_) {
+        $settings[$key] = get_option($key);
       }
     }
 
-    return rest_ensure_response($settings);
+    return wp_send_json($settings);
   }
 
-  public function createNewsDraft($request)
+  public function createNewsDraft()
   {
-    $paragraphs = explode("\n", $request['content']);
+    check_ajax_referer(AJAX_NONCE_NAME);
 
-    return rest_ensure_response(wp_insert_post([
+    $paragraphs = explode("\n", $_REQUEST['content']);
+
+    return wp_send_json(wp_insert_post([
       'post_type' => 'post',
       'post_title' => sanitize_text_field($paragraphs[0]),
       'post_content' => implode("\n", array_slice($paragraphs, 1)),
@@ -190,26 +197,27 @@ class VeterNRWPlugin
     ]));
   }
 
-  public function createDaytimeDraft($request)
+  public function createDaytimeDraft()
   {
-    $weather = $request['weather'];
-    $news = $request['news'];
-    $textBefore = $request['textBefore'];
-    $textBlockHeader = $request['textBlockHeader'];
-    $textAfter = $request['textAfter'];
+    check_ajax_referer(AJAX_NONCE_NAME);
+
+    $weather = $_POST['weather'];
+    $news = $_POST['news'];
+    $textBefore = $_POST['textBefore'];
+    $textBlockHeader = $_POST['textBlockHeader'];
+    $textAfter = $_POST['textAfter'];
 
     $blocks = $this->twig->render('post.twig', [
       'weather' => sanitize_text_field($weather),
       'textBefore' => sanitize_text_field($textBefore),
       'textBlockHeader' => sanitize_text_field($textBlockHeader),
-      'news' => json_decode($news),
+      'news' => json_decode(html_entity_decode(stripslashes($news))),
       'textAfter' => sanitize_text_field($textAfter),
     ]);
 
-
-    return rest_ensure_response(wp_insert_post([
+    return wp_send_json(wp_insert_post([
       'post_type' => 'post',
-      'post_title' => $request['title'],
+      'post_title' => $_REQUEST['title'],
       'post_content' => $blocks,
       'post_status' => 'draft',
     ]));

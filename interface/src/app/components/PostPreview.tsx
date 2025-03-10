@@ -82,7 +82,7 @@ export const PostPreview: FC<PropsWithChildren<PostPreviewProps>> = ({
         <GeneratedResponse
           model={selectedModel}
           prompt={weatherRenderedPrompt}
-          isReady={Boolean(weatherText)}
+          isReady={isReady}
           onReady={setGeneratedWeatherText}
           onChange={setWeatherRenderedPrompt}
         />

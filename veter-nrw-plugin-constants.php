@@ -11,7 +11,8 @@ const SCRIPT_NAME = 'veter-nrw-script';
 const STYLE_NAME = 'veter-nrw-style';
 const SCRIPT_URL = 'interface/dist/assets/index.js';
 const STYLE_URL = 'interface/dist/assets/index.css';
-
+const AJAX_OBJECT_NAME = 'wp_ajax_obj';
+const AJAX_NONCE_NAME = 'nonce';
 const FIELDS = [
   'API Keys' => [
     'api_chat_gpt' => [
