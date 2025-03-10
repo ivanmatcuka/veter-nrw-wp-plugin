@@ -39,8 +39,8 @@ class VeterNRWPlugin
 
   public function load()
   {
-    add_action('admin_menu', [$this, 'addPluginOptionsPage']);
-    add_action('admin_init', [$this, 'registerPluginOptions']);
+    add_action('admin_menu', [$this, 'addOptionsPage']);
+    add_action('admin_init', [$this, 'registerOptions']);
 
     add_action('wp_ajax_get_settings', [$this, 'getSettings']);
     add_action('wp_ajax_create_news_draft', [$this, 'createNewsDraft']);
@@ -52,6 +52,7 @@ class VeterNRWPlugin
     $src = plugins_url(SCRIPT_URL, __FILE__);
 
     wp_register_script(SCRIPT_NAME, $src);
+
     wp_localize_script(
       SCRIPT_NAME,
       AJAX_OBJECT_NAME,
@@ -60,6 +61,7 @@ class VeterNRWPlugin
         'nonce'    => wp_create_nonce(AJAX_NONCE_NAME),
       )
     );
+
     wp_enqueue_script(SCRIPT_NAME, $src, NULL, NULL, array(
       'in_footer' => true,
       'strategy'  => 'defer',
@@ -71,7 +73,11 @@ class VeterNRWPlugin
     );
   }
 
-  public function addPluginOptionsPage()
+
+  /**
+   * Registers the options page where the plugin settings live.
+   */
+  public function addOptionsPage()
   {
     add_options_page(
       OPTIONS_PAGE_TITLE,
@@ -82,13 +88,6 @@ class VeterNRWPlugin
     );
 
     $this->addMenuPage();
-  }
-
-  public function renderOptionsPage()
-  {
-    echo $this->twig->render('options.twig', [
-      'output' => $this->getOutput()
-    ]);
   }
 
   /**
@@ -111,12 +110,19 @@ class VeterNRWPlugin
     add_action('admin_print_scripts-' . $suffix, [$this, 'enqueueScripts']);
   }
 
+  public function renderOptionsPage()
+  {
+    echo $this->twig->render('options.twig', [
+      'output' => $this->getOutput()
+    ]);
+  }
+
   public function renderMenuPage()
   {
     echo $this->twig->render('index.twig');
   }
 
-  public function registerPluginOptions()
+  public function registerOptions()
   {
     foreach (FIELDS as $section => $fields) {
       $renderer = function () use ($section) {
@@ -237,5 +243,7 @@ class VeterNRWPlugin
   }
 }
 
-$plugin = new VeterNRWPlugin();
-$plugin->load();
+if (is_admin()) {
+  $plugin = new VeterNRWPlugin();
+  $plugin->load();
+}
