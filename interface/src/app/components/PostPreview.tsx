@@ -57,11 +57,11 @@ export const PostPreview: FC<PropsWithChildren<PostPreviewProps>> = ({
     setIsLoading(false);
   }, [
     textHeader,
-    generatedWeatherText,
     news,
     textBefore,
     textAfter,
     textBlockHeader,
+    generatedWeatherText,
   ]);
 
   useEffect(() => {

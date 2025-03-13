@@ -1,8 +1,3 @@
-declare const wp_ajax_obj: {
-  nonce: string;
-  ajax_url: string;
-};
-
 import Anthropic from '@anthropic-ai/sdk';
 import { TextBlock } from '@anthropic-ai/sdk/resources/index.mjs';
 import { ChatGPTAPI, ChatGPTError, ChatMessage } from 'chatgpt';
@@ -12,6 +7,8 @@ export type SettingsResponse = {
   default_model: string;
   api_chat_gpt: string;
   api_claude: string;
+  claude_model: string;
+  chat_gpt_model: string;
   morning_text_header: string;
   morning_text_before: string;
   morning_text_block_header: string;
@@ -104,11 +101,15 @@ export const createDaytimeDraft = async (
 export const getChatGPTResponse = async (
   apiKey: string,
   prompt: string,
+  model?: string,
   onProgress?: ((partialResponse: ChatMessage) => void) | undefined,
 ) => {
   try {
     const api = new ChatGPTAPI({
       apiKey,
+      completionParams: {
+        model,
+      },
     });
 
     const res = await api.sendMessage(prompt, {
@@ -123,7 +124,11 @@ export const getChatGPTResponse = async (
   }
 };
 
-export const getClaudeResponse = async (apiKey: string, prompt: string) => {
+export const getClaudeResponse = async (
+  apiKey: string,
+  prompt: string,
+  model: string = 'claude-3-5-sonnet-latest',
+) => {
   try {
     const api = new Anthropic({
       dangerouslyAllowBrowser: true,
@@ -132,7 +137,7 @@ export const getClaudeResponse = async (apiKey: string, prompt: string) => {
 
     const res = await api.messages.create({
       messages: [{ role: 'user', content: prompt }],
-      model: 'claude-3-5-sonnet-latest',
+      model,
       max_tokens: 1024,
     });
 

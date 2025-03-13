@@ -47,11 +47,16 @@ export const GeneratedResponse: FC<GeneratedResponseProps> = ({
     let response;
 
     if (model === 'Claude') {
-      response = await getClaudeResponse(settings.api_claude, prompt);
+      response = await getClaudeResponse(
+        settings.api_claude,
+        prompt,
+        settings.claude_model,
+      );
     } else {
       response = await getChatGPTResponse(
         settings.api_chat_gpt,
         prompt,
+        settings.chat_gpt_model,
         (res) => setCachedTexts([...cachedTexts, res.text]),
       );
     }
@@ -70,6 +75,8 @@ export const GeneratedResponse: FC<GeneratedResponseProps> = ({
     model,
     settings.api_chat_gpt,
     settings.api_claude,
+    settings.claude_model,
+    settings.chat_gpt_model,
     cachedTexts,
     onReady,
   ]);

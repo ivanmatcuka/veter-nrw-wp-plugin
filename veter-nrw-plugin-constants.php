@@ -22,6 +22,14 @@ const FIELDS = [
     'api_claude' => [
       'type' => 'text',
       'label' => 'API Claude',
+    ],
+    'chat_gpt_model' => [
+      'type' => 'text',
+      'label' => 'ChatGPT Model',
+    ],
+    'claude_model' => [
+      'type' => 'text',
+      'label' => 'Claude Model',
     ]
   ],
   'Model' => [
