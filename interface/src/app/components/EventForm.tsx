@@ -151,7 +151,6 @@ export const EventForm: FC<EventFormProps> = ({ daytime }) => {
             })
           }
           multiline
-          required
         />
         <TextField
           fullWidth
@@ -165,7 +164,6 @@ export const EventForm: FC<EventFormProps> = ({ daytime }) => {
           }
           multiline
           maxRows={20}
-          required
         />
         <TextField
           fullWidth
@@ -178,7 +176,6 @@ export const EventForm: FC<EventFormProps> = ({ daytime }) => {
             })
           }
           multiline
-          required
         />
         <TextField
           fullWidth
@@ -192,7 +189,6 @@ export const EventForm: FC<EventFormProps> = ({ daytime }) => {
             })
           }
           multiline
-          required
         />
       </Section>
 

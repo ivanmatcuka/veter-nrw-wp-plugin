@@ -52,7 +52,6 @@ class VeterNRWPlugin
     $src = plugins_url(SCRIPT_URL, __FILE__);
 
     wp_register_script(SCRIPT_NAME, $src);
-
     wp_localize_script(
       SCRIPT_NAME,
       AJAX_OBJECT_NAME,
@@ -61,12 +60,10 @@ class VeterNRWPlugin
         'nonce'    => wp_create_nonce(AJAX_NONCE_NAME),
       )
     );
-
     wp_enqueue_script(SCRIPT_NAME, $src, NULL, NULL, array(
       'in_footer' => true,
       'strategy'  => 'defer',
     ));
-
     wp_enqueue_style(
       STYLE_NAME,
       plugins_url(STYLE_URL, __FILE__),
@@ -82,7 +79,7 @@ class VeterNRWPlugin
     add_options_page(
       OPTIONS_PAGE_TITLE,
       OPTIONS_MENU_TITLE,
-      'manage_options',
+      'publish_posts',
       OPTIONS_MENU_SLUG,
       [$this, 'renderOptionsPage'],
     );
@@ -100,7 +97,7 @@ class VeterNRWPlugin
     $suffix = add_menu_page(
       PAGE_TITLE,
       MENU_TITLE,
-      'manage_options',
+      'publish_posts',
       MENU_SLUG,
       [$this, 'renderMenuPage'],
       'dashicons-welcome-widgets-menus',

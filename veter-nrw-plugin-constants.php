@@ -1,27 +1,38 @@
 <?php
 
+const PLUGIN_SETTINGS_SLUG = 'veter-plugin-settings';
+
+// Options API
 const OPTIONS_PAGE_TITLE = 'BETEP Plugin Settings';
 const OPTIONS_MENU_TITLE = 'BETEP Plugin Settings';
 const OPTIONS_MENU_SLUG = 'veter-options';
+
+// Menu API
 const PAGE_TITLE = 'BETEP';
 const MENU_TITLE = 'BETEP';
 const MENU_SLUG = 'veter';
-const PLUGIN_SETTINGS_SLUG = 'veter-plugin-settings';
+
+// Assets
 const SCRIPT_NAME = 'veter-nrw-script';
 const STYLE_NAME = 'veter-nrw-style';
 const SCRIPT_URL = 'interface/dist/assets/index.js';
 const STYLE_URL = 'interface/dist/assets/index.css';
+
+// AJAX
 const AJAX_OBJECT_NAME = 'wp_ajax_obj';
 const AJAX_NONCE_NAME = 'nonce';
+
 const FIELDS = [
   'API Keys' => [
     'api_chat_gpt' => [
       'type' => 'text',
-      'label' => 'API ChatGPT',
+      'label' => 'API ChatGPT *',
+      'required' => true,
     ],
     'api_claude' => [
       'type' => 'text',
-      'label' => 'API Claude',
+      'label' => 'API Claude *',
+      'required' => true,
     ],
     'chat_gpt_model' => [
       'type' => 'text',
@@ -35,7 +46,8 @@ const FIELDS = [
   'Model' => [
     'default_model' => [
       'type' => 'select',
-      'label' => 'Default Model',
+      'label' => 'Default Model *',
+      'required' => true,
       'options' => [
         'ChatGPT',
         'Claude',
@@ -43,7 +55,8 @@ const FIELDS = [
     ],
     'tones' => [
       'type' => 'text',
-      'label' => 'Tones',
+      'label' => 'Tones *',
+      'required' => true,
     ],
   ],
   'Morning Text' => [
@@ -85,23 +98,28 @@ const FIELDS = [
   'Prompts' => [
     'news_prompt' => [
       'type' => 'textarea',
-      'label' => 'News Prompt',
+      'label' => 'News Prompt *',
+      'required' => true,
     ],
     'news_header_prompt' => [
       'type' => 'textarea',
-      'label' => 'News Header Prompt',
+      'label' => 'News Header Prompt *',
+      'required' => true,
     ],
     'morning_prompt' => [
       'type' => 'textarea',
-      'label' => 'Morning Prompt',
+      'label' => 'Morning Prompt *',
+      'required' => true,
     ],
     'weather_prompt' => [
       'type' => 'textarea',
-      'label' => 'Weather Prompt',
+      'label' => 'Weather Prompt *',
+      'required' => true,
     ],
     'evening_prompt' => [
       'type' => 'textarea',
-      'label' => 'Evening Prompt',
+      'label' => 'Evening Prompt *',
+      'required' => true,
     ],
   ]
 ];
