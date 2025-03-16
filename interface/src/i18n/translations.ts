@@ -12,8 +12,8 @@ export const translations = {
         'Make sure to fill out all the fields in Settings -> BETER Plugin Settings',
     },
     eveningForm: {
-      addNewsItem: 'Add event item',
       additionalInstructionsPlaceholder: 'Enter additional instructions...',
+      addNewsItem: 'Add event item',
       generate: 'Generate',
       model: 'Model',
       news: 'Events',
@@ -27,8 +27,8 @@ export const translations = {
       textHeaderPlaceholder: 'Enter text header...',
     },
     morningForm: {
-      addNewsItem: 'Add news item',
       additionalInstructionsPlaceholder: 'Enter additional instructions...',
+      addNewsItem: 'Add news item',
       events: 'Events',
       generate: 'Generate',
       model: 'Model',

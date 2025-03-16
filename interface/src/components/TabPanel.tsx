@@ -9,8 +9,8 @@ type TabPanelProps = {
 
 export const TabPanel: FC<PropsWithChildren<TabPanelProps>> = ({
   children,
-  value,
   index,
+  value,
   ...other
 }) => (
   <div

@@ -23,11 +23,11 @@ type EventNewsProps = {
 };
 
 export const EventNews: FC<EventNewsProps> = ({
-  news,
   daytime,
   handleAddNewsItem,
   handleRemoveNewsItem,
   handleUpdateNewsItem,
+  news,
 }) => {
   const { t } = useTranslation([
     daytime === 'morning' ? 'morningForm' : 'eveningForm',

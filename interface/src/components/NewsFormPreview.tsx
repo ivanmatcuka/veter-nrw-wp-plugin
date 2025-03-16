@@ -1,9 +1,10 @@
-import stringInject from 'stringinject';
-
 import { Box, Button } from '@mui/material';
 import { FC, useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { createNewsDraft } from '../service';
+import stringInject from 'stringinject';
+
+import { createNewsDraft } from '~/service';
+
 import { GeneratedResponse } from './GeneratedResponse';
 
 type NewsFormPreviewProps = {
@@ -18,14 +19,14 @@ type NewsFormPreviewProps = {
 };
 
 export const NewsFormPreview: FC<NewsFormPreviewProps> = ({
-  selectedModel,
-  newsPrompt,
-  paragraphCount,
-  selectedTone,
   additionalInstructions,
+  isReady,
+  newsPrompt,
   newsText,
   newsUrl,
-  isReady,
+  paragraphCount,
+  selectedModel,
+  selectedTone,
 }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [postDraftId, setPostDraftId] = useState<number | null>(null);

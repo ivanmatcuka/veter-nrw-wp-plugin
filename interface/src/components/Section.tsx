@@ -6,9 +6,9 @@ type SectionProps = {
   chip?: string;
 };
 export const Section: FC<PropsWithChildren<SectionProps>> = ({
-  title,
-  chip,
   children,
+  chip,
+  title,
 }) => (
   <Box display="flex" flexDirection="column" gap={1}>
     <Box display="flex" alignItems="center" justifyContent="space-between">

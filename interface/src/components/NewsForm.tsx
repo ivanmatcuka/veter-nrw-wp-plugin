@@ -10,15 +10,14 @@ import {
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { Page } from '@/components/Page';
-import { Section } from '@/components/Section';
-import { parseTones } from '@/utils/helpers';
+import { Page } from '~/components/Page';
+import { Section } from '~/components/Section';
+import { AI_MODELS } from '~/contants';
+import { useSettings } from '~/hooks/useSettings';
+import { parseTones } from '~/utils/helpers';
 
 import { NewsFormPreview } from './NewsFormPreview';
 import { ToneSelector } from './ToneSelector';
-
-import { AI_MODELS } from '@/contants';
-import { useSettings } from '@/hooks/useSettings';
 
 const PARAGRAPH_OPTIONS = [1, 2, 3, 4, 5];
 

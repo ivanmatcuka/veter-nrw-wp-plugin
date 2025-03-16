@@ -6,12 +6,11 @@ import ArrowBack from '@mui/icons-material/ArrowBackIos';
 import ArrowForward from '@mui/icons-material/ArrowForwardIos';
 import AutoAwesome from '@mui/icons-material/AutoAwesome';
 import ReplayIcon from '@mui/icons-material/Replay';
-
 import { Alert, Box, IconButton, TextField } from '@mui/material';
 import { FC, useCallback, useEffect, useState } from 'react';
 
-import { useSettings } from '@/hooks/useSettings';
-import { getChatGPTResponse, getClaudeResponse } from '@/service';
+import { useSettings } from '~/hooks/useSettings';
+import { getChatGPTResponse, getClaudeResponse } from '~/service';
 
 type GeneratedResponseProps = {
   model: string;
@@ -21,11 +20,11 @@ type GeneratedResponseProps = {
   onChange?: (value: string) => void;
 };
 export const GeneratedResponse: FC<GeneratedResponseProps> = ({
-  model,
-  prompt,
   isReady,
-  onReady,
+  model,
   onChange,
+  onReady,
+  prompt,
 }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [cachedTexts, setCachedTexts] = useState<string[]>([]);

@@ -1,6 +1,6 @@
 import { createContext, useContext } from 'react';
 
-import { SettingsResponse } from '@/service';
+import { SettingsResponse } from '~/service';
 
 type SettingsContextType = {
   settings: Partial<SettingsResponse>;

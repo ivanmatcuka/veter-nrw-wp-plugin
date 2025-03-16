@@ -1,10 +1,11 @@
 import { Box, Button, Typography } from '@mui/material';
 import { FC, PropsWithChildren, useCallback, useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import stringInject from 'stringinject';
 
-import { useSettings } from '@/hooks/useSettings';
-import { createDaytimeDraft } from '@/service';
-import { useTranslation } from 'react-i18next';
+import { useSettings } from '~/hooks/useSettings';
+import { createDaytimeDraft } from '~/service';
+
 import { News } from './EventNews';
 import { GeneratedResponse } from './GeneratedResponse';
 
@@ -22,15 +23,15 @@ type PostPreviewProps = {
 };
 export const PostPreview: FC<PropsWithChildren<PostPreviewProps>> = ({
   daytime,
-  textAfter,
-  textHeader,
-  textBefore,
-  textBlockHeader,
-  selectedModel,
-  weatherText,
   isReady,
   news,
+  selectedModel,
+  textAfter,
+  textBefore,
+  textBlockHeader,
+  textHeader,
   updateNews,
+  weatherText,
 }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [postDraftId, setPostDraftId] = useState<number | null>(null);

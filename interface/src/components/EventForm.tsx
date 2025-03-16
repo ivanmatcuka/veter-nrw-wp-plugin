@@ -3,13 +3,14 @@ import { FC, useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import stringInject from 'stringinject';
 
-import { AI_MODELS } from '@/contants';
-import { useSettings } from '@/hooks/useSettings';
+import { Page } from '~/components/Page';
+import { Section } from '~/components/Section';
+import { AI_MODELS } from '~/contants';
+import { useSettings } from '~/hooks/useSettings';
 
+// Non-reusable components
 import { EventNews, News } from './EventNews';
-import { Page } from './Page';
 import { PostPreview } from './PostPreview';
-import { Section } from './Section';
 
 type DaytimeSettings = {
   textHeader: string;
@@ -44,9 +45,9 @@ export const EventForm: FC<EventFormProps> = ({ daytime }) => {
   const getNewsRenderedPrompt = useCallback(
     (item: News[number]) =>
       stringInject(settings[`${daytime}_prompt`], {
-        [`${prefix}_X_URL`]: item.url,
-        [`${prefix}_X_text`]: item.text,
         [`${prefix}_X_add`]: item.extra || ' ',
+        [`${prefix}_X_text`]: item.text,
+        [`${prefix}_X_URL`]: item.url,
       }),
     [prefix, settings, daytime],
   );
