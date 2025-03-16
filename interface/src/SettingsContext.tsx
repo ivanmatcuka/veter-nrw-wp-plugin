@@ -11,7 +11,7 @@ import { useTranslation } from 'react-i18next';
 
 import { Page } from '@/components/Page';
 
-import { getSettings, SettingsResponse } from './service';
+import { getSettings, SettingsResponse } from '@/service';
 
 type SettingsContextType = {
   settings: Partial<SettingsResponse>;

@@ -14,8 +14,8 @@ const MENU_SLUG = 'veter';
 
 // Assets
 const SCRIPT_NAME = 'veter-nrw-script';
-const STYLE_NAME = 'veter-nrw-style';
 const SCRIPT_URL = 'interface/dist/assets/index.js';
+const STYLE_NAME = 'veter-nrw-style';
 const STYLE_URL = 'interface/dist/assets/index.css';
 
 // AJAX
