@@ -5,12 +5,12 @@ import { translations } from './translations';
 
 i18n.use(initReactI18next).init({
   fallbackLng: 'en',
+  lng: 'en',
+  resources: translations,
+
   interpolation: {
     escapeValue: false,
   },
-  lng: 'en',
-
-  resources: translations,
 });
 
 export default i18n;

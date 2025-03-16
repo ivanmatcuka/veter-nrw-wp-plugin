@@ -1,6 +1,7 @@
 import { createTheme } from '@mui/material/styles';
 
 const theme = createTheme({
+  cssVariables: true,
   components: {
     MuiAccordionSummary: {
       styleOverrides: {
@@ -35,7 +36,6 @@ const theme = createTheme({
       },
     },
   },
-  cssVariables: true,
   palette: {
     grey: {
       500: '#dfdfdf',

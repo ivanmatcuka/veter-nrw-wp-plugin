@@ -13,11 +13,11 @@ import { useSettings } from '~/hooks/useSettings';
 import { getChatGPTResponse, getClaudeResponse } from '~/service';
 
 type GeneratedResponseProps = {
+  isReady: boolean;
   model: string;
   prompt: string;
-  isReady: boolean;
-  onReady?: (value: string) => void;
   onChange?: (value: string) => void;
+  onReady?: (value: string) => void;
 };
 export const GeneratedResponse: FC<GeneratedResponseProps> = ({
   isReady,
@@ -95,22 +95,22 @@ export const GeneratedResponse: FC<GeneratedResponseProps> = ({
 
   return (
     <Box
-      display="flex"
-      gap={2}
-      component="div"
       alignItems="flex-start"
+      component="div"
+      display="flex"
       flexDirection={{ sm: 'row', xs: 'column' }}
+      gap={2}
     >
       <IconButton
-        onClick={handleGenerate}
-        loading={isLoading}
         disabled={!isReady}
+        loading={isLoading}
+        onClick={handleGenerate}
       >
         <ReplayIcon fontSize="small" />
       </IconButton>
       <Box
-        flex={1}
         display="flex"
+        flex={1}
         flexDirection="column"
         gap={2}
         overflow="hidden"
@@ -118,24 +118,24 @@ export const GeneratedResponse: FC<GeneratedResponseProps> = ({
       >
         {cachedTexts[currentIndex] && (
           <Box
-            dangerouslySetInnerHTML={{ __html: cachedTexts[currentIndex] }}
             component="div"
+            dangerouslySetInnerHTML={{ __html: cachedTexts[currentIndex] }}
           />
         )}
         <Alert color={error ? 'error' : 'info'} icon={<AutoAwesome />}>
           <TextField
-            fullWidth
-            multiline
-            value={prompt}
-            onChange={(event) => onChange?.(event.target.value)}
-            variant="standard"
-            disabled={isLoading}
             slotProps={{
               input: {
                 disableUnderline: true,
                 fullWidth: true,
               },
             }}
+            disabled={isLoading}
+            onChange={(event) => onChange?.(event.target.value)}
+            value={prompt}
+            variant="standard"
+            fullWidth
+            multiline
           />
         </Alert>
       </Box>

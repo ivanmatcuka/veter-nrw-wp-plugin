@@ -13,10 +13,10 @@ import { EventNews, News } from './EventNews';
 import { PostPreview } from './PostPreview';
 
 type DaytimeSettings = {
-  textHeader: string;
+  textAfter: string;
   textBefore: string;
   textBlockHeader: string;
-  textAfter: string;
+  textHeader: string;
 };
 type EventFormProps = {
   daytime: 'morning' | 'evening';
@@ -110,21 +110,21 @@ export const EventForm: FC<EventFormProps> = ({ daytime }) => {
 
   return (
     <Page
-      component="form"
       onSubmit={(e) => {
         e.preventDefault();
         setIsSubmitted(true);
       }}
+      component="form"
     >
       {daytime === 'morning' && (
-        <Section title={t('weather')} chip="{weather}">
+        <Section chip="{weather}" title={t('weather')}>
           <TextField
-            fullWidth
-            multiline
             maxRows={20}
             name="weatherText"
-            value={weatherText}
             onChange={(event) => setWeatherText(event.target.value)}
+            value={weatherText}
+            fullWidth
+            multiline
             required
           />
         </Section>
@@ -132,63 +132,63 @@ export const EventForm: FC<EventFormProps> = ({ daytime }) => {
 
       <Section title={t('news')}>
         <EventNews
-          news={news}
           daytime={daytime}
           handleAddNewsItem={handleAddNewsItem}
           handleRemoveNewsItem={handleRemoveNewsItem}
           handleUpdateNewsItem={handleUpdateNewsItem}
+          news={news}
         />
       </Section>
 
       <Section title={t('text')}>
         <TextField
-          fullWidth
-          label={t('textHeaderPlaceholder')}
-          value={daytimeSettings.textHeader}
           onChange={(e) =>
             setDaytimeSettings({
               ...daytimeSettings,
               textHeader: e.target.value,
             })
           }
+          label={t('textHeaderPlaceholder')}
+          value={daytimeSettings.textHeader}
+          fullWidth
           multiline
         />
         <TextField
-          fullWidth
-          label={t('textBeforePlaceholder')}
-          value={daytimeSettings.textBefore}
           onChange={(e) =>
             setDaytimeSettings({
               ...daytimeSettings,
               textBefore: e.target.value,
             })
           }
-          multiline
+          label={t('textBeforePlaceholder')}
           maxRows={20}
+          value={daytimeSettings.textBefore}
+          fullWidth
+          multiline
         />
         <TextField
-          fullWidth
-          label={t('textBlockHeaderPlaceholder')}
-          value={daytimeSettings.textBlockHeader}
           onChange={(e) =>
             setDaytimeSettings({
               ...daytimeSettings,
               textBlockHeader: e.target.value,
             })
           }
+          label={t('textBlockHeaderPlaceholder')}
+          value={daytimeSettings.textBlockHeader}
+          fullWidth
           multiline
         />
         <TextField
-          fullWidth
-          label={t('textAfterPlaceholder')}
-          maxRows={20}
-          value={daytimeSettings.textAfter}
           onChange={(e) =>
             setDaytimeSettings({
               ...daytimeSettings,
               textAfter: e.target.value,
             })
           }
+          label={t('textAfterPlaceholder')}
+          maxRows={20}
+          value={daytimeSettings.textAfter}
+          fullWidth
           multiline
         />
       </Section>
@@ -197,13 +197,13 @@ export const EventForm: FC<EventFormProps> = ({ daytime }) => {
         <div>
           {AI_MODELS.map((model) => (
             <FormControlLabel
-              key={model}
               control={
                 <Radio
                   checked={selectedModel === model}
                   onChange={() => setSelectedModel(model)}
                 />
               }
+              key={model}
               label={model}
             />
           ))}
@@ -219,12 +219,12 @@ export const EventForm: FC<EventFormProps> = ({ daytime }) => {
           )}
           <PostPreview
             {...daytimeSettings}
-            isReady={isSubmitted}
-            weatherText={weatherText}
             daytime={daytime}
+            isReady={isSubmitted}
             news={news ?? []}
-            updateNews={handleUpdateNewsItem}
             selectedModel={selectedModel || ''}
+            updateNews={handleUpdateNewsItem}
+            weatherText={weatherText}
           />
         </Box>
       </Section>

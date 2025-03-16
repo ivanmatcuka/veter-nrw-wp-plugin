@@ -3,31 +3,31 @@ import { TextBlock } from '@anthropic-ai/sdk/resources/index.mjs';
 import { ChatGPTAPI, ChatGPTError, ChatMessage } from 'chatgpt';
 
 export type SettingsResponse = {
-  id: number;
-  default_model: string;
-  api_chat_gpt: string;
-  api_claude: string;
-  claude_model: string;
-  chat_gpt_model: string;
-  morning_text_header: string;
-  morning_text_before: string;
-  morning_text_block_header: string;
-  morning_text_after: string;
-  evening_text_header: string;
-  evening_text_before: string;
-  evening_text_block_header: string;
-  evening_text_after: string;
-  created_at: string;
-  updated_at: string;
-  news_prompt: string;
-  news_header_prompt: string;
-  morning_prompt: string;
-  evening_prompt: string;
-  weather_prompt: string;
-  tones: string;
-
   // TODO: check
   [key: string]: unknown;
+  api_chat_gpt: string;
+  api_claude: string;
+  chat_gpt_model: string;
+  claude_model: string;
+  created_at: string;
+  default_model: string;
+  evening_prompt: string;
+  evening_text_after: string;
+  evening_text_before: string;
+  evening_text_block_header: string;
+  evening_text_header: string;
+  id: number;
+  morning_prompt: string;
+  morning_text_after: string;
+  morning_text_before: string;
+  morning_text_block_header: string;
+  morning_text_header: string;
+  news_header_prompt: string;
+  news_prompt: string;
+  tones: string;
+  updated_at: string;
+
+  weather_prompt: string;
 };
 
 export const getSettings = async (): Promise<SettingsResponse | null> => {

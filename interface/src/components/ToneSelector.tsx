@@ -4,8 +4,8 @@ import { FC } from 'react';
 import { parseTones } from '~/utils/helpers';
 
 type ToneSelectorProps = {
-  tones: string;
   selectedTone: string;
+  tones: string;
   onChange: (selectedTone: string) => void;
 };
 export const ToneSelector: FC<ToneSelectorProps> = ({
@@ -13,16 +13,16 @@ export const ToneSelector: FC<ToneSelectorProps> = ({
   selectedTone,
   tones,
 }) => (
-  <Box display="flex" gap={1} flexWrap="wrap">
+  <Box display="flex" flexWrap="wrap" gap={1}>
     {parseTones(tones).map((tone, index) => (
       <FormControlLabel
-        key={index}
         control={
           <Radio
             checked={selectedTone === tone}
             onChange={() => onChange(tone)}
           />
         }
+        key={index}
         label={tone}
       />
     ))}

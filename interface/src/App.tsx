@@ -18,19 +18,19 @@ function App() {
   return (
     <Box maxWidth="md">
       <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
-        <Tabs value={value} onChange={handleChange}>
+        <Tabs onChange={handleChange} value={value}>
           <Tab label={t('news')} {...a11yProps(0)} />
           <Tab label={t('morning')} {...a11yProps(1)} />
           <Tab label={t('evening')} {...a11yProps(2)} />
         </Tabs>
       </Box>
-      <TabPanel value={value} index={0}>
+      <TabPanel index={0} value={value}>
         <NewsForm />
       </TabPanel>
-      <TabPanel value={value} index={1}>
+      <TabPanel index={1} value={value}>
         <EventForm daytime="morning" />
       </TabPanel>
-      <TabPanel value={value} index={2}>
+      <TabPanel index={2} value={value}>
         <EventForm daytime="evening" />
       </TabPanel>
     </Box>

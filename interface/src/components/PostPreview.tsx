@@ -11,14 +11,14 @@ import { GeneratedResponse } from './GeneratedResponse';
 
 type PostPreviewProps = {
   daytime: 'morning' | 'evening';
-  textHeader: string;
-  textBefore: string;
-  textBlockHeader: string;
-  textAfter: string;
-  selectedModel: string;
-  weatherText?: string;
   isReady: boolean;
   news: News;
+  selectedModel: string;
+  textAfter: string;
+  textBefore: string;
+  textBlockHeader: string;
+  textHeader: string;
+  weatherText?: string;
   updateNews: (index: number, field: keyof News[0], value: string) => void;
 };
 export const PostPreview: FC<PropsWithChildren<PostPreviewProps>> = ({
@@ -81,27 +81,27 @@ export const PostPreview: FC<PropsWithChildren<PostPreviewProps>> = ({
       <Typography variant="body1">{textBefore}</Typography>
       {weatherText && (
         <GeneratedResponse
-          model={selectedModel}
-          prompt={weatherRenderedPrompt}
           isReady={isReady}
-          onReady={setGeneratedWeatherText}
+          model={selectedModel}
           onChange={setWeatherRenderedPrompt}
+          onReady={setGeneratedWeatherText}
+          prompt={weatherRenderedPrompt}
         />
       )}
       <Typography variant="h6">{textBlockHeader}</Typography>
       {news.map((item, index) => (
         <GeneratedResponse
+          isReady={isReady}
           key={index}
           model={selectedModel}
-          prompt={item.prompt || ''}
-          isReady={isReady}
-          onReady={(text) => updateNews(index, 'result', text)}
           onChange={(text) => updateNews(index, 'prompt', text)}
+          onReady={(text) => updateNews(index, 'result', text)}
+          prompt={item.prompt || ''}
         />
       ))}
       <Typography variant="body1">{textAfter}</Typography>
       {news.some((item) => item.result) && (
-        <Button variant="contained" loading={isLoading} onClick={postDraft}>
+        <Button loading={isLoading} onClick={postDraft} variant="contained">
           {t('postDraft')}
         </Button>
       )}

@@ -49,38 +49,38 @@ export const NewsForm = () => {
 
   return (
     <Page
-      component="form"
       onSubmit={(e) => {
         e.preventDefault();
         setIsSubmitted(true);
       }}
+      component="form"
     >
-      <Section title={t('articleText')} chip="{news_text}">
+      <Section chip="{news_text}" title={t('articleText')}>
         <TextField
-          fullWidth
-          multiline
           maxRows={20}
           onChange={(e) => setNewsText(e.target.value)}
           value={newsText}
+          fullWidth
+          multiline
           required
         />
       </Section>
 
-      <Section title={t('articleUrl')} chip="{url}">
+      <Section chip="{url}" title={t('articleUrl')}>
         <TextField
+          onChange={(e) => setNewsUrl(e.target.value)}
+          value={newsUrl}
           variant="outlined"
           fullWidth
-          value={newsUrl}
           multiline
-          onChange={(e) => setNewsUrl(e.target.value)}
           required
         />
       </Section>
 
-      <Section title={t('paragraphCount')} chip="{count}">
+      <Section chip="{count}" title={t('paragraphCount')}>
         <Select
-          value={paragraphCount}
           onChange={(e) => setParagraphCount(+e.target.value)}
+          value={paragraphCount}
           required
         >
           {PARAGRAPH_OPTIONS.map((count) => (
@@ -92,25 +92,25 @@ export const NewsForm = () => {
       </Section>
 
       {settings?.tones && (
-        <Section title={t('tone')} chip="{tone}">
-          <Box display="flex" gap={1} flexWrap="wrap">
+        <Section chip="{tone}" title={t('tone')}>
+          <Box display="flex" flexWrap="wrap" gap={1}>
             <ToneSelector
-              tones={settings.tones}
-              selectedTone={selectedTone}
               onChange={setSelectedTone}
+              selectedTone={selectedTone}
+              tones={settings.tones}
             />
           </Box>
         </Section>
       )}
 
-      <Section title={t('additionalInstructions')} chip="{add}">
+      <Section chip="{add}" title={t('additionalInstructions')}>
         <TextField
-          fullWidth
-          multiline
           maxRows={20}
           name="additionalInstructions"
-          value={additionalInstructions}
           onChange={(e) => setAdditionalInstructions(e.target.value)}
+          value={additionalInstructions}
+          fullWidth
+          multiline
         />
       </Section>
 
@@ -118,14 +118,14 @@ export const NewsForm = () => {
         <Box display="flex" gap={1}>
           {AI_MODELS.map((model, index) => (
             <FormControlLabel
-              key={index}
-              value={model}
-              name="selectedModel"
               onChange={(e) =>
                 setSelectedModel((e.target as HTMLInputElement).value)
               }
               control={<Radio checked={selectedModel === model} />}
+              key={index}
               label={model}
+              name="selectedModel"
+              value={model}
             />
           ))}
         </Box>
@@ -139,14 +139,14 @@ export const NewsForm = () => {
             </Button>
           )}
           <NewsFormPreview
-            selectedModel={selectedModel}
-            newsPrompt={prompt}
-            paragraphCount={paragraphCount}
-            selectedTone={selectedTone}
             additionalInstructions={additionalInstructions}
+            isReady={isSubmitted}
+            newsPrompt={prompt}
             newsText={newsText}
             newsUrl={newsUrl}
-            isReady={isSubmitted}
+            paragraphCount={paragraphCount}
+            selectedModel={selectedModel}
+            selectedTone={selectedTone}
           />
         </Box>
       </Section>

@@ -5,6 +5,6 @@ declare module 'stringinject';
  * via wp_localize_script.
  */
 declare const wp_ajax_obj: {
-  nonce: string;
   ajax_url: string;
+  nonce: string;
 };

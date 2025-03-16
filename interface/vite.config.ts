@@ -4,6 +4,7 @@ import { defineConfig } from 'vite';
 
 // https://vite.dev/config/
 export default defineConfig({
+  plugins: [react()],
   build: {
     rollupOptions: {
       output: {
@@ -13,7 +14,6 @@ export default defineConfig({
       },
     },
   },
-  plugins: [react()],
   resolve: {
     alias: {
       '~': path.resolve(__dirname, './src'),

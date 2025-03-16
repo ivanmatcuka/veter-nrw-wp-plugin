@@ -8,14 +8,14 @@ import { createNewsDraft } from '~/service';
 import { GeneratedResponse } from './GeneratedResponse';
 
 type NewsFormPreviewProps = {
-  selectedModel: string;
-  newsPrompt: string;
-  paragraphCount: number;
-  selectedTone: string;
   additionalInstructions: string;
+  isReady: boolean;
+  newsPrompt: string;
   newsText: string;
   newsUrl: string;
-  isReady: boolean;
+  paragraphCount: number;
+  selectedModel: string;
+  selectedTone: string;
 };
 
 export const NewsFormPreview: FC<NewsFormPreviewProps> = ({
@@ -69,23 +69,23 @@ export const NewsFormPreview: FC<NewsFormPreviewProps> = ({
   return (
     <Box display="flex" flexDirection="column" gap={2}>
       <GeneratedResponse
-        model={selectedModel}
-        prompt={newsRenderedPrompt}
-        onReady={setGeneratedNewsText}
-        onChange={setNewsRenderedPrompt}
         isReady={isReady}
+        model={selectedModel}
+        onChange={setNewsRenderedPrompt}
+        onReady={setGeneratedNewsText}
+        prompt={newsRenderedPrompt}
       />
       {generatedNewsText && (
-        <Button variant="contained" loading={isLoading} onClick={postDraft}>
+        <Button loading={isLoading} onClick={postDraft} variant="contained">
           {t('postDraft')}
         </Button>
       )}
       {postDraftId && (
         <Button
+          disabled={!generatedNewsText}
           href={postDraftLink}
           target="_blank"
           variant="outlined"
-          disabled={!generatedNewsText}
         >
           {t('openDraft')}
         </Button>

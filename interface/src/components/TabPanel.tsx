@@ -14,10 +14,10 @@ export const TabPanel: FC<PropsWithChildren<TabPanelProps>> = ({
   ...other
 }) => (
   <div
-    role="tabpanel"
+    aria-labelledby={`simple-tab-${index}`}
     hidden={value !== index}
     id={`simple-tabpanel-${index}`}
-    aria-labelledby={`simple-tab-${index}`}
+    role="tabpanel"
     {...other}
   >
     {value === index && <Box sx={{ p: 3 }}>{children}</Box>}

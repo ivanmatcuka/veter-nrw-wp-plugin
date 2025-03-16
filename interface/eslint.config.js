@@ -24,14 +24,49 @@ export default tseslint.config(
       'perfectionist/sort-imports': 'error',
       'perfectionist/sort-objects': [
         'error',
-        {
-          type: 'alphabetical',
-        },
+        { groups: ['unknown', 'method', 'multiline-member'] },
       ],
       'perfectionist/sort-interfaces': [
         'error',
         {
           groups: ['external', 'internal', 'parent', 'sibling', 'index'],
+        },
+      ],
+      'perfectionist/sort-jsx-props': [
+        'error',
+        {
+          type: 'alphabetical',
+          order: 'asc',
+          fallbackSort: { type: 'unsorted' },
+          ignoreCase: true,
+          specialCharacters: 'keep',
+          partitionByNewLine: false,
+          newlinesBetween: 'ignore',
+          groups: ['multiline', 'unknown', 'shorthand'],
+        },
+      ],
+      'perfectionist/sort-intersection-types': [
+        'error',
+        {
+          type: 'alphabetical',
+          order: 'asc',
+          fallbackSort: { type: 'unsorted' },
+          ignoreCase: true,
+          specialCharacters: 'keep',
+          partitionByComment: false,
+          partitionByNewLine: false,
+          newlinesBetween: 'ignore',
+        },
+      ],
+      'perfectionist/sort-object-types': [
+        'error',
+        {
+          type: 'alphabetical',
+          order: 'asc',
+          ignoreCase: true,
+          specialCharacters: 'keep',
+          sortBy: 'name',
+          groups: ['unknown', 'method', 'multiline-member'],
         },
       ],
       'react-refresh/only-export-components': [
