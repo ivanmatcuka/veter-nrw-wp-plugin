@@ -49,11 +49,11 @@ export const NewsFormPreview: FC<NewsFormPreviewProps> = ({
   useEffect(() => {
     setNewsRenderedPrompt(
       stringInject(newsPrompt, {
-        count: paragraphCount,
-        tone: selectedTone,
         add: additionalInstructions || ' ',
-        url: newsUrl,
+        count: paragraphCount,
         news_text: newsText,
+        tone: selectedTone,
+        url: newsUrl,
       }),
     );
   }, [

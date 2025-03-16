@@ -26,10 +26,10 @@ export const EventForm: FC<EventFormProps> = ({ daytime }) => {
   const [weatherText, setWeatherText] = useState('');
   const [selectedModel, setSelectedModel] = useState(AI_MODELS[0]);
   const [daytimeSettings, setDaytimeSettings] = useState<DaytimeSettings>({
-    textHeader: '',
+    textAfter: '',
     textBefore: '',
     textBlockHeader: '',
-    textAfter: '',
+    textHeader: '',
   });
 
   const { settings } = useSettings();
@@ -53,10 +53,10 @@ export const EventForm: FC<EventFormProps> = ({ daytime }) => {
 
   const [news, setNews] = useState<News>([
     {
+      extra: '',
+      prompt: getNewsRenderedPrompt({ extra: '', text: '', url: '' }),
       text: '',
       url: '',
-      extra: '',
-      prompt: getNewsRenderedPrompt({ text: '', url: '', extra: '' }),
     },
   ]);
 
@@ -64,10 +64,10 @@ export const EventForm: FC<EventFormProps> = ({ daytime }) => {
     setNews([
       ...news,
       {
+        extra: '',
+        prompt: getNewsRenderedPrompt({ extra: '', text: '', url: '' }),
         text: '',
         url: '',
-        extra: '',
-        prompt: getNewsRenderedPrompt({ text: '', url: '', extra: '' }),
       },
     ]);
   }, [news, getNewsRenderedPrompt]);
@@ -96,10 +96,10 @@ export const EventForm: FC<EventFormProps> = ({ daytime }) => {
 
   useEffect(() => {
     setDaytimeSettings({
-      textHeader: settings[`${daytime}_text_header`] || '',
+      textAfter: settings[`${daytime}_text_after`] || '',
       textBefore: settings[`${daytime}_text_before`] || '',
       textBlockHeader: settings[`${daytime}_text_block_header`] || '',
-      textAfter: settings[`${daytime}_text_after`] || '',
+      textHeader: settings[`${daytime}_text_header`] || '',
     });
   }, [settings, daytime]);
 

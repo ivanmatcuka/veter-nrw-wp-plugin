@@ -6,7 +6,7 @@ type SettingsContextType = {
   settings: Partial<SettingsResponse>;
 };
 
-const SettingsContext = createContext<SettingsContextType | undefined>(
+export const SettingsContext = createContext<SettingsContextType | undefined>(
   undefined,
 );
 

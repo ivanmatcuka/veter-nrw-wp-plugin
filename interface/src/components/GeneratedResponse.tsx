@@ -100,7 +100,7 @@ export const GeneratedResponse: FC<GeneratedResponseProps> = ({
       gap={2}
       component="div"
       alignItems="flex-start"
-      flexDirection={{ xs: 'column', sm: 'row' }}
+      flexDirection={{ sm: 'row', xs: 'column' }}
     >
       <IconButton
         onClick={handleGenerate}

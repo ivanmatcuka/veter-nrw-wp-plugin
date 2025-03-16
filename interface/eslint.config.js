@@ -1,6 +1,7 @@
 import js from '@eslint/js';
 import reactHooks from 'eslint-plugin-react-hooks';
 import reactRefresh from 'eslint-plugin-react-refresh';
+import sortKeys from 'eslint-plugin-sort-keys-fix';
 import globals from 'globals';
 import tseslint from 'typescript-eslint';
 
@@ -16,9 +17,11 @@ export default tseslint.config(
     plugins: {
       'react-hooks': reactHooks,
       'react-refresh': reactRefresh,
+      'sort-keys-fix': sortKeys,
     },
     rules: {
       ...reactHooks.configs.recommended.rules,
+      'sort-keys-fix/sort-keys-fix': 'warn',
       'react-refresh/only-export-components': [
         'warn',
         { allowConstantExport: true },

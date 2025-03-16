@@ -37,9 +37,9 @@ export const getSettings = async (): Promise<SettingsResponse | null> => {
 
   try {
     const response = await fetch(wp_ajax_obj.ajax_url, {
-      method: 'POST',
-      credentials: 'same-origin',
       body: formData,
+      credentials: 'same-origin',
+      method: 'POST',
     });
 
     if (!response.ok) {
@@ -60,9 +60,9 @@ export const createNewsDraft = async (
 
   try {
     const response = await fetch(wp_ajax_obj.ajax_url, {
-      method: 'POST',
-      credentials: 'same-origin',
       body: formData,
+      credentials: 'same-origin',
+      method: 'POST',
     });
 
     if (!response.ok) {
@@ -83,9 +83,9 @@ export const createDaytimeDraft = async (
 
   try {
     const response = await fetch(wp_ajax_obj.ajax_url, {
-      method: 'POST',
-      credentials: 'same-origin',
       body: formData,
+      credentials: 'same-origin',
+      method: 'POST',
     });
 
     if (!response.ok) {
@@ -131,14 +131,14 @@ export const getClaudeResponse = async (
 ) => {
   try {
     const api = new Anthropic({
-      dangerouslyAllowBrowser: true,
       apiKey,
+      dangerouslyAllowBrowser: true,
     });
 
     const res = await api.messages.create({
-      messages: [{ role: 'user', content: prompt }],
-      model,
       max_tokens: 1024,
+      messages: [{ content: prompt, role: 'user' }],
+      model,
     });
 
     return { data: (res.content[0] as TextBlock).text, error: null };

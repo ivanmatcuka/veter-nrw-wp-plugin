@@ -1,22 +1,12 @@
 import { createTheme } from '@mui/material/styles';
 
 const theme = createTheme({
-  typography: {
-    fontFamily: ['var(--font-ubuntu)'].join(','),
-  },
-  palette: {
-    primary: {
-      main: '#490678',
-    },
-    grey: {
-      500: '#dfdfdf',
-    },
-  },
   components: {
-    MuiButton: {
-      defaultProps: {
-        disableRipple: true,
-        disableElevation: true,
+    MuiAccordionSummary: {
+      styleOverrides: {
+        content: {
+          width: '100%',
+        },
       },
     },
     MuiAlert: {
@@ -26,11 +16,10 @@ const theme = createTheme({
         },
       },
     },
-    MuiAccordionSummary: {
-      styleOverrides: {
-        content: {
-          width: '100%',
-        },
+    MuiButton: {
+      defaultProps: {
+        disableElevation: true,
+        disableRipple: true,
       },
     },
     MuiButtonBase: {
@@ -47,6 +36,17 @@ const theme = createTheme({
     },
   },
   cssVariables: true,
+  palette: {
+    grey: {
+      500: '#dfdfdf',
+    },
+    primary: {
+      main: '#490678',
+    },
+  },
+  typography: {
+    fontFamily: ['var(--font-ubuntu)'].join(','),
+  },
 });
 
 export default theme;
