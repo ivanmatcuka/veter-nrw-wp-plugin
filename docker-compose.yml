@@ -18,5 +18,5 @@ services:
     ports:
       - 8080:80
     volumes:
-      - .:/var/www/html/wp-content/plugins
+      - .:/var/www/html/wp-content/plugins/veter-nrw
     restart: always

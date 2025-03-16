@@ -3,14 +3,13 @@ import {
   createContext,
   FC,
   PropsWithChildren,
-  useContext,
   useEffect,
   useMemo,
   useState,
 } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { Page } from '@/app/components/Page';
+import { Page } from '@/components/Page';
 
 import { getSettings, SettingsResponse } from './service';
 
@@ -22,7 +21,17 @@ const SettingsContext = createContext<SettingsContextType | undefined>(
   undefined,
 );
 
-export const AI_MODELS = ['ChatGPT', 'Claude'];
+const REQUIRED_FIELDS: (keyof SettingsResponse)[] = [
+  'api_chat_gpt',
+  'api_claude',
+  'default_model',
+  'tones',
+  'news_prompt',
+  'news_header_prompt',
+  'morning_prompt',
+  'weather_prompt',
+  'evening_prompt',
+];
 
 export const SettingsProvider: FC<PropsWithChildren> = ({ children }) => {
   const [settings, setSettings] = useState<Partial<SettingsResponse>>({});
@@ -30,7 +39,7 @@ export const SettingsProvider: FC<PropsWithChildren> = ({ children }) => {
   const { t } = useTranslation('common');
 
   const isSettingsValid = useMemo(
-    () => Object.values(settings).every(Boolean),
+    () => REQUIRED_FIELDS.every((field) => !!settings[field]),
     [settings],
   );
 
@@ -60,14 +69,4 @@ export const SettingsProvider: FC<PropsWithChildren> = ({ children }) => {
       {children}
     </SettingsContext.Provider>
   );
-};
-
-export const useSettings = () => {
-  const context = useContext(SettingsContext);
-
-  if (context === undefined) {
-    throw new Error('useSettings must be used within a SettingsProvider');
-  }
-
-  return context;
 };

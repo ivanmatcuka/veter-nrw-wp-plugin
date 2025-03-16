@@ -10,9 +10,8 @@ import ReplayIcon from '@mui/icons-material/Replay';
 import { Alert, Box, IconButton, TextField } from '@mui/material';
 import { FC, useCallback, useEffect, useState } from 'react';
 
-import { getChatGPTResponse, getClaudeResponse } from '@/app/service';
-
-import { useSettings } from '../SettingsContext';
+import { useSettings } from '@/hooks/useSettings';
+import { getChatGPTResponse, getClaudeResponse } from '@/service';
 
 type GeneratedResponseProps = {
   model: string;
@@ -56,7 +55,8 @@ export const GeneratedResponse: FC<GeneratedResponseProps> = ({
       response = await getChatGPTResponse(
         settings.api_chat_gpt,
         prompt,
-        settings.chat_gpt_model,
+        // @TODO: refactor
+        settings.chat_gpt_model || undefined,
         (res) => setCachedTexts([...cachedTexts, res.text]),
       );
     }

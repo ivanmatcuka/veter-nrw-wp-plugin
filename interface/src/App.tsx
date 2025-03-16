@@ -1,9 +1,9 @@
 import { Box, Tab, Tabs } from '@mui/material';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { EventForm } from './app/components/EventForm';
-import { NewsForm } from './app/components/NewsForm';
-import { TabPanel } from './app/components/TabPanel';
+import { EventForm } from './components/EventForm';
+import { NewsForm } from './components/NewsForm';
+import { TabPanel } from './components/TabPanel';
 import { a11yProps } from './utils/helpers';
 
 function App() {

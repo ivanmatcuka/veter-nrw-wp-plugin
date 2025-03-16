@@ -1,4 +1,4 @@
-import { SettingsProvider } from '@/app/SettingsContext';
+import { SettingsProvider } from '@/SettingsContext';
 import { ThemeProvider } from '@mui/material/styles';
 import domReady from '@wordpress/dom-ready';
 import React from 'react';

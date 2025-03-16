@@ -5,10 +5,9 @@ The interface for the plugin is a simple React application created with Vite.
 ## Directory Structure
 
 - **src/**: Contains the source code for the React application.
-  - **app/**: Contains the main application components and context.
-    - **components/**: Contains reusable React components such as forms, previews, and settings.
-    - **SettingsContext.tsx**: Provides context for managing application settings.
-    - **service.ts**: Contains service functions for interacting with external APIs.
+  - **components/**: Contains reusable React components such as forms, previews, and settings.
+  - **SettingsContext.tsx**: Provides context for managing application settings.
+  - **service.ts**: Contains service functions for interacting with external APIs.
   - **i18n/**: Contains internationalization setup and translations.
   - **utils/**: Contains utility functions.
   - **main.tsx**: The entry point for the React application.

@@ -2,9 +2,9 @@ import { Box, Button, Typography } from '@mui/material';
 import { FC, PropsWithChildren, useCallback, useEffect, useState } from 'react';
 import stringInject from 'stringinject';
 
+import { useSettings } from '@/hooks/useSettings';
+import { createDaytimeDraft } from '@/service';
 import { useTranslation } from 'react-i18next';
-import { createDaytimeDraft } from '../service';
-import { useSettings } from '../SettingsContext';
 import { News } from './EventNews';
 import { GeneratedResponse } from './GeneratedResponse';
 

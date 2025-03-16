@@ -1,15 +1,16 @@
-import { Page } from '@/app/components/Page';
+import { Page } from '@/components/Page';
 import { Box, Button, FormControlLabel, Radio, TextField } from '@mui/material';
 import { FC, useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import stringInject from 'stringinject';
 
-import { Section } from '@/app/components/Section';
+import { Section } from '@/components/Section';
 
 import { EventNews, News } from './EventNews';
 import { PostPreview } from './PostPreview';
 
-import { AI_MODELS, useSettings } from '../SettingsContext';
+import { AI_MODELS } from '@/contants';
+import { useSettings } from '@/hooks/useSettings';
 
 type DaytimeSettings = {
   textHeader: string;

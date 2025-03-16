@@ -101,7 +101,7 @@ export const createDaytimeDraft = async (
 export const getChatGPTResponse = async (
   apiKey: string,
   prompt: string,
-  model?: string,
+  model: string = 'gpt-3.5-turbo',
   onProgress?: ((partialResponse: ChatMessage) => void) | undefined,
 ) => {
   try {
