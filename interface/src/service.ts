@@ -105,6 +105,13 @@ export const getChatGPTResponse = async (
   onProgress?: ((partialResponse: ChatMessage) => void) | undefined,
 ) => {
   try {
+    if (import.meta.env.MODE === 'development') {
+      console.warn('Using mocked response for ChatGPT');
+      const mockedResponse = `Mocked ChatGPT response for prompt: "${prompt}" using model: "${model}"`;
+      onProgress?.({ text: mockedResponse } as ChatMessage);
+      return { data: mockedResponse, error: null };
+    }
+
     const api = new ChatGPTAPI({
       apiKey,
       completionParams: {
@@ -130,6 +137,13 @@ export const getClaudeResponse = async (
   model: string = 'claude-3-5-sonnet-latest',
 ) => {
   try {
+    if (import.meta.env.MODE === 'development') {
+      console.warn('Using mocked response for Claude');
+      // Mocked response for local development
+      const mockedResponse = `Mocked Claude response for prompt: "${prompt}" using model: "${model}"`;
+      return { data: mockedResponse, error: null };
+    }
+
     const api = new Anthropic({
       apiKey,
       dangerouslyAllowBrowser: true,

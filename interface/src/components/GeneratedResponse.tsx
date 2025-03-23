@@ -91,7 +91,7 @@ export const GeneratedResponse: FC<GeneratedResponseProps> = ({
   useEffect(() => {
     if (cachedTexts.length || !prompt || !isReady) return;
     handleGenerate();
-  }, [cachedTexts, currentIndex, prompt, isReady, handleGenerate]);
+  }, [prompt, cachedTexts, isReady, handleGenerate]);
 
   return (
     <Box

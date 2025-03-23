@@ -6,6 +6,7 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
+    "watch": "NODE_ENV=development && tsc -b && vite build --watch --mode development",
     "lint": "eslint .",
     "preview": "vite preview"
   },

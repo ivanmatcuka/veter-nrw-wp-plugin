@@ -83,16 +83,18 @@ export const EventForm: FC<EventFormProps> = ({ daytime }) => {
 
   const handleUpdateNewsItem = useCallback(
     (index: number, field: keyof News[0], value: string) => {
-      const newNews = [...news];
-      newNews[index] = { ...newNews[index], [field]: value };
+      setNews((prevNews) => {
+        const newNews = [...prevNews];
+        newNews[index] = { ...newNews[index], [field]: value };
 
-      if (field !== 'prompt' && field !== 'result') {
-        newNews[index].prompt = getNewsRenderedPrompt(newNews[index]);
-      }
+        if (field !== 'prompt' && field !== 'result') {
+          newNews[index].prompt = getNewsRenderedPrompt(newNews[index]);
+        }
 
-      setNews(newNews);
+        return newNews;
+      });
     },
-    [news, getNewsRenderedPrompt],
+    [getNewsRenderedPrompt],
   );
 
   useEffect(() => {
@@ -107,6 +109,8 @@ export const EventForm: FC<EventFormProps> = ({ daytime }) => {
   useEffect(() => {
     if (settings?.default_model) setSelectedModel(settings.default_model);
   }, [settings?.default_model]);
+
+  console.log({ news });
 
   return (
     <Page
